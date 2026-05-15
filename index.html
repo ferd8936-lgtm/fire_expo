@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퍼드(FERD) - 국제소방안전박람회 방문 문의</title>
+    <style>
+        /* 폰트 적용 */
+        @font-face {
+            font-family: 'NexonLv2Gothic';
+            src: url('NexonLv2Gothic_2.ttf') format('truetype');
+        }
+
+        :root {
+            --primary-red: #d32f2f; /* 소방 안전 레드 */
+            --dark-gray: #2c3e50;
+            --light-gray: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'NexonLv2Gothic', sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--dark-gray);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+
+        .logo-text {
+            font-size: 28pt;
+            font-weight: 800;
+            color: var(--primary-red);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .sub-logo {
+            font-size: 9pt;
+            color: #7f8c8d;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .welcome-section {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-top: 5px solid var(--primary-red);
+        }
+
+        .welcome-msg {
+            font-size: 11pt;
+            line-height: 1.7;
+            word-break: keep-all;
+            margin: 0;
+        }
+
+        .form-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 10pt;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 11pt;
+            box-sizing: border-box;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            background-color: #fff9f9;
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary-red);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 13pt;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+            transition: transform 0.1s;
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+            background-color: #b71c1c;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 30px 20px;
+            font-size: 9pt;
+            color: #bdc3c7;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* 관리자 모달 스타일 */
+        #adminOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--white);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-red);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .close-admin-btn {
+            padding: 10px 20px;
+            background: #eee;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            min-width: 900px;
+        }
+
+        th, td {
+            border: 1px solid #ecf0f1;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--primary-red);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        @media (max-width: 400px) {
+            .logo-text { font-size: 24pt; }
+            .welcome-section, .form-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 class="logo-text">퍼드(FERD)</h1>
+        <div class="sub-logo">Fire Safety IoT Specialist</div>
+    </header>
+
+    <div class="welcome-section">
+        <p class="welcome-msg">
+            <strong>국제소방안전박람회 퍼드(FERD) 부스를 방문해주셔서 감사합니다!</strong><br><br>
+            아래 정보를 남겨주시면 확인 후 신속하게 피드백 드리겠습니다. 요청 시 현장 방문하여 시스템 시연과 설명이 가능하오니 많은 관심 부탁드립니다.
+        </p>
+    </div>
+
+    <div class="form-card">
+        <div class="input-group">
+            <label>회사명</label>
+            <input type="text" id="company" placeholder="회사명을 입력하세요">
+        </div>
+        <div class="input-group">
+            <label>직급</label>
+            <input type="text" id="position" placeholder="직급을 입력하세요">
+        </div>
+        <div class="input-group">
+            <label>이름</label>
+            <input type="text" id="userName" placeholder="이름을 입력하세요">
+        </div>
+        <div class="input-group">
+            <label>전화번호</label>
+            <input type="tel" id="userPhone" placeholder="010-0000-0000">
+        </div>
+        <div class="input-group">
+            <label>이메일 주소</label>
+            <input type="email" id="userEmail" placeholder="example@ferd.com">
+        </div>
+        <div class="input-group" style="margin-bottom: 10px;">
+            <label>문의사항</label>
+            <textarea id="userInquiry" placeholder="제안서, 견적서 요청 등 문의사항을 남겨주세요"></textarea>
+        </div>
+
+        <button class="save-btn" onclick="submitForm()">저장하기</button>
+    </div>
+</div>
+
+<footer onclick="requestAdminAccess()">
+    © 2021 FERD. All rights Reserved.
+</footer>
+
+<div id="adminOverlay">
+    <div class="admin-header">
+        <h2 style="margin:0; font-size: 15pt; color: var(--primary-red);">상담 문의 관리 목록</h2>
+        <button class="close-admin-btn" onclick="closeAdmin()">닫기</button>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>회사명</th>
+                    <th>직급</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>이메일 주소</th>
+                    <th>문의사항</th>
+                    <th>저장시간</th>
+                </tr>
+            </thead>
+            <tbody id="adminDataTable">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 데이터 저장 함수
+    function submitForm() {
+        const company = document.getElementById('company').value;
+        const position = document.getElementById('position').value;
+        const name = document.getElementById('userName').value;
+        const phone = document.getElementById('userPhone').value;
+        const email = document.getElementById('userEmail').value;
+        const inquiry = document.getElementById('userInquiry').value;
+
+        if (!name || !phone) {
+            alert("성함과 전화번호는 반드시 입력해주셔야 합니다.");
+            return;
+        }
+
+        const now = new Date();
+        const saveTime = now.getFullYear() + "-" + 
+                         (now.getMonth() + 1).toString().padStart(2, '0') + "-" + 
+                         now.getDate().toString().padStart(2, '0') + " " + 
+                         now.getHours().toString().padStart(2, '0') + ":" + 
+                         now.getMinutes().toString().padStart(2, '0');
+
+        const entry = { company, position, name, phone, email, inquiry, saveTime };
+
+        // 로컬 스토리지 데이터 불러오기 및 추가
+        let storageData = JSON.parse(localStorage.getItem('ferd_leads') || '[]');
+        storageData.push(entry);
+        localStorage.setItem('ferd_leads', JSON.stringify(storageData));
+
+        alert("소중한 문의가 정상적으로 등록되었습니다.\\n확인 후 신속히 안내드리겠습니다.");
+        
+        // 폼 초기화
+        document.querySelectorAll('input, textarea').forEach(input => input.value = '');
+    }
+
+    // 관리자 모드 접속
+    function requestAdminAccess() {
+        const password = prompt("관리자 비밀번호를 입력하세요.");
+        if (password === "jkd7102!!") {
+            openAdmin();
+        } else if (password !== null) {
+            alert("비밀번호가 올바르지 않습니다.");
+        }
+    }
+
+    function openAdmin() {
+        const list = JSON.parse(localStorage.getItem('ferd_leads') || '[]');
+        const tableBody = document.getElementById('adminDataTable');
+        tableBody.innerHTML = '';
+
+        if (list.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:50px; color:#999;">저장된 문의 내역이 없습니다.</td></tr>';
+        } else {
+            list.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.company}</td>
+                    <td>${item.position}</td>
+                    <td>${item.name}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.email}</td>
+                    <td>${item.inquiry.replace(/\\n/g, '<br>')}</td>
+                    <td>${item.saveTime}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        document.getElementById('adminOverlay').style.display = 'block';
+    }
+
+    function closeAdmin() {
+        document.getElementById('adminOverlay').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
