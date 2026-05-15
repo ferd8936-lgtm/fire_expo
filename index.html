@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>퍼드(FERD) - 국제소방안전박람회 방문 문의</title>
+    <title>FERD - 국제소방안전박람회 방문 문의</title>
     <style>
         /* 폰트 적용 */
         @font-face {
@@ -71,6 +71,25 @@
             line-height: 1.7;
             word-break: keep-all;
             margin: 0;
+        }
+
+        /* 명함 다운로드 버튼 디자인 */
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #ff0000;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 10.5pt;
+            font-weight: bold;
+            vertical-align: middle;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:active {
+            background-color: #cc0000;
         }
 
         .form-card {
@@ -212,14 +231,16 @@
 
 <div class="container">
     <header>
-        <h1 class="logo-text">퍼드(FERD)</h1>
+        <h1 class="logo-text">FERD</h1>
         <div class="sub-logo">Fire Safety IoT Specialist</div>
     </header>
 
     <div class="welcome-section">
         <p class="welcome-msg">
             <strong>국제소방안전박람회 퍼드(FERD) 부스를 방문해주셔서 감사합니다!</strong><br><br>
-            아래 정보를 남겨주시면 확인 후 신속하게 피드백 드리겠습니다. 요청 시 현장 방문하여 시스템 시연과 설명이 가능하오니 많은 관심 부탁드립니다.
+            아래 정보를 남겨주시면 확인 후 신속하게 피드백을 드리겠습니다. 요청 시 현장 방문을 통한 시스템 시연 및 상세한 안내도 가능하오니 많은 관심 부탁드립니다.
+            <br>
+            <a href="명함.PNG" download class="download-btn">퍼드(FERD) 명함 다운로드</a>
         </p>
     </div>
 
@@ -283,7 +304,6 @@
 </div>
 
 <script>
-    // 데이터 저장 함수
     function submitForm() {
         const company = document.getElementById('company').value;
         const position = document.getElementById('position').value;
@@ -306,18 +326,15 @@
 
         const entry = { company, position, name, phone, email, inquiry, saveTime };
 
-        // 로컬 스토리지 데이터 불러오기 및 추가
         let storageData = JSON.parse(localStorage.getItem('ferd_leads') || '[]');
         storageData.push(entry);
         localStorage.setItem('ferd_leads', JSON.stringify(storageData));
 
-        alert("소중한 문의가 정상적으로 등록되었습니다.\\n확인 후 신속히 안내드리겠습니다.");
+        alert("소중한 문의가 정상적으로 등록되었습니다.\n확인 후 신속히 안내드리겠습니다.");
         
-        // 폼 초기화
         document.querySelectorAll('input, textarea').forEach(input => input.value = '');
     }
 
-    // 관리자 모드 접속
     function requestAdminAccess() {
         const password = prompt("관리자 비밀번호를 입력하세요.");
         if (password === "jkd7102!!") {
@@ -343,7 +360,7 @@
                     <td>${item.name}</td>
                     <td>${item.phone}</td>
                     <td>${item.email}</td>
-                    <td>${item.inquiry.replace(/\\n/g, '<br>')}</td>
+                    <td>${item.inquiry.replace(/\n/g, '<br>')}</td>
                     <td>${item.saveTime}</td>
                 </tr>`;
                 tableBody.innerHTML += row;
