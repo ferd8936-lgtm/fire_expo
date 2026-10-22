@@ -3,209 +3,484 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FERD - 국제소방안전박람회 방문 문의</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
+    <title>타보까 롤러 클럽 1주년 축하 방명록</title>
+    <!-- Tailwind CSS (디자인 프레임워크) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- SheetJS (엑셀 .xlsx 다운로드용) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- JSZip (이미지 일괄 다운로드용) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Firebase SDK (v9 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* 폰트 적용 (Nexon Gothic) */
-        @font-face {
-            font-family: 'NexonLv2Gothic';
-            src: url('NexonLv2Gothic_2.ttf') format('truetype');
-        }
-
-        :root {
-            --primary-red: #d32f2f;
-            --dark-gray: #2c3e50;
-            --light-gray: #f4f7f6;
-            --white: #ffffff;
-        }
-
-        body {
-            font-family: 'NexonLv2Gothic', sans-serif;
-            background-color: var(--light-gray);
-            margin: 0; padding: 0;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; color: var(--dark-gray);
-        }
-
-        .container { width: 100%; max-width: 480px; padding: 20px; box-sizing: border-box; }
-        header { text-align: center; padding: 40px 0 20px; }
-        .logo-text { font-size: 28pt; font-weight: 800; color: var(--primary-red); margin: 0; }
-        .sub-logo { font-size: 9pt; color: #7f8c8d; margin-top: 5px; text-transform: uppercase; }
-
-        .welcome-section {
-            background: var(--white); padding: 25px; border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 30px;
-            border-top: 5px solid var(--primary-red);
-        }
-        .welcome-msg { font-size: 11pt; line-height: 1.7; word-break: keep-all; margin: 0; }
-
-        .download-btn {
-            display: inline-block; margin-top: 15px; padding: 4px 8px;
-            background-color: #ff0000; color: #ffffff !important;
-            text-decoration: none; border-radius: 5px; font-size: 10.5pt;
-            font-weight: bold; vertical-align: middle;
-        }
-
-        .form-card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; font-size: 10pt; font-weight: bold; margin-bottom: 8px; color: #34495e; }
-        input, textarea {
-            width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;
-            font-size: 11pt; box-sizing: border-box; font-family: inherit;
-        }
-        textarea { height: 120px; resize: none; }
-
-        .save-btn {
-            width: 100%; padding: 18px; background-color: var(--primary-red);
-            color: var(--white); border: none; border-radius: 8px;
-            font-size: 13pt; font-weight: bold; cursor: pointer; margin-top: 10px;
-        }
-
-        footer { margin-top: auto; padding: 30px 20px; font-size: 9pt; color: #bdc3c7; text-align: center; cursor: pointer; }
-
-        /* 관리자 모달 (가로 1줄 고정 적용) */
-        #adminOverlay {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: var(--white);
-            z-index: 9999; overflow-y: auto; padding: 20px; box-sizing: border-box;
-        }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-red); padding-bottom: 15px; margin-bottom: 20px; }
-        .close-admin-btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-family: inherit; }
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 9.5pt; min-width: 1000px; }
-        th, td { border: 1px solid #ecf0f1; padding: 12px; text-align: left; white-space: nowrap; }
-        th { background-color: #f8f9fa; color: var(--primary-red); font-weight: bold; }
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-8 px-4">
 
-<div class="container">
-    <header>
-        <h1 class="logo-text">퍼드(FERD)</h1>
-        <div class="sub-logo">Fire Safety IoT Specialist</div>
-    </header>
+    <div class="max-w-xl mx-auto space-y-6">
+        
+        <!-- 1. 상단 타이틀 배너 -->
+        <header class="text-center bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 p-6 rounded-2xl shadow-xl border border-pink-400/30">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-md">
+                🎉 타보까 롤러 클럽 1주년 🎉
+            </h1>
+            <p class="text-pink-200 mt-2 font-medium text-sm sm:text-base">함께 달려온 소중한 시간, 축하 메시지를 남겨주세요!</p>
+        </header>
 
-    <div class="welcome-section">
-        <p class="welcome-msg">
-            <strong>국제소방안전박람회 퍼드(FERD) 부스를 방문해주셔서 감사합니다!</strong><br><br>
-            아래 정보를 남겨주시면 확인 후 신속하게 피드백 드리겠습니다. 항상 현장 방문을 통한 시스템 시연이 가능하오니 많은 관심 부탁드립니다.
-            <br>
-            <a href="https://raw.githubusercontent.com/ferd8936-lgtm/download/main/명함.png" target="_blank" class="download-btn">퍼드(FERD) 명함 다운로드</a></a>
-        </p>
-    </div>
-
-    <div class="form-card">
-        <div class="input-group"><label>회사명</label><input type="text" id="company" placeholder="회사명을 입력하세요"></div>
-        <div class="input-group"><label>직급</label><input type="text" id="position" placeholder="직급을 입력하세요"></div>
-        <div class="input-group"><label>이름</label><input type="text" id="userName" placeholder="이름을 입력하세요"></div>
-        <div class="input-group"><label>전화번호</label><input type="tel" id="userPhone" placeholder="010-0000-0000"></div>
-        <div class="input-group"><label>이메일 주소</label><input type="email" id="userEmail" placeholder="example@ferd.com"></div>
-        <div class="input-group"><label>문의사항</label><textarea id="userInquiry" placeholder="문의사항을 남겨주세요"></textarea></div>
-        <button class="save-btn" id="saveBtn" onclick="submitForm()">저장하기</button>
-    </div>
-</div>
-
-<footer onclick="requestAdminAccess()">© 2021 FERD. All rights Reserved.</footer>
-
-<div id="adminOverlay">
-    <div class="admin-header">
-        <h2 style="margin:0; font-size: 15pt; color: var(--primary-red);">상담 문의 관리 목록 (Cloud)</h2>
-        <div>
-            <button class="close-admin-btn" style="background-color: #2ecc71; color: white; margin-right: 5px;" onclick="downloadCSV()">엑셀 다운로드</button>
-            <button class="close-admin-btn" onclick="closeAdmin()">닫기</button>
+        <!-- 2. 단체 사진 영역 (1.jpg) -->
+        <div class="bg-slate-800 p-3 rounded-2xl shadow-lg border border-slate-700">
+            <img src="1.jpg" alt="타보까 단체 사진" class="w-full h-auto rounded-xl object-cover shadow-inner max-h-[350px]" onerror="this.src='https://via.placeholder.com/600x400/1e293b/cbd5e1?text=Tabogga+1st+Anniversary';">
         </div>
+
+        <!-- 3. 따뜻한 안내 멘트 -->
+        <div class="bg-pink-950/40 border border-pink-500/30 p-4 rounded-xl text-center shadow-sm">
+            <p class="text-pink-200 font-semibold text-sm sm:text-base leading-relaxed">
+                롤러장에서 본인 사진과 함께 축하메세지를 작성해주세요!<br>우리 타보까 아이들이 정말 좋아할겁니다^^
+            </p>
+        </div>
+
+        <!-- 4. 입력 폼 영역 -->
+        <div class="bg-slate-800/90 backdrop-blur p-6 rounded-2xl shadow-xl border border-slate-700 space-y-4">
+            <h2 class="text-lg font-bold text-pink-400 border-b border-slate-700 pb-2">✍️ 축하 방명록 작성하기</h2>
+            
+            <!-- ① 소속 입력칸 -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">소속 (클럽명 또는 지역)</label>
+                <input type="text" id="clubName" placeholder="예: 타보까, 대구롤러클럽" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <!-- ② 이름 입력칸 -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">이름 또는 닉네임</label>
+                <input type="text" id="authorName" placeholder="예: 롤러왕 홍길동" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <!-- ③ 축하 메세지 입력칸 -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">축하 메시지</label>
+                <textarea id="message" rows="3" placeholder="타보까 클럽 1주년을 축하합니다! 앞으로도 안전하게 오래 함께 타요!" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 transition"></textarea>
+            </div>
+
+            <!-- ④ 이미지 첨부 버튼 (제일 아래 배치) -->
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-xs font-semibold text-slate-300">본인 사진 첨부</label>
+                    <button type="button" id="posChangeBtn" onclick="cyclePosition()" class="text-xs text-pink-400 hover:text-pink-300 hidden">🎨 글씨 위치 변경 (클릭)</button>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-pink-600 file:text-white hover:file:bg-pink-500 file:cursor-pointer cursor-pointer bg-slate-900 border border-slate-700 rounded-xl">
+            </div>
+
+            <!-- 미리보기 영역 -->
+            <div id="previewContainer" class="hidden space-y-2 pt-2">
+                <span class="text-xs font-semibold text-slate-400">🖼️ 자동 생성될 이미지 카드 미리보기</span>
+                <div class="relative rounded-xl overflow-hidden border border-slate-600 max-w-xs mx-auto shadow-md">
+                    <canvas id="previewCanvas" class="w-full h-auto block"></canvas>
+                </div>
+            </div>
+
+            <!-- 등록하기 버튼 -->
+            <button onclick="submitCard()" id="submitBtn" class="w-full py-3.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition active:scale-[0.99] cursor-pointer">
+                🚀 축하 메시지 등록하기
+            </button>
+        </div>
+
+        <!-- 5. 실시간 방명록 리스트 -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-white px-1">💌 축하 메시지 모음 (<span id="totalCount">0</span>명 참여중)</h3>
+            <div id="cardList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- 동적 카드 삽입 -->
+            </div>
+        </div>
+
+        <!-- 6. 관리자 다운로드 영역 -->
+        <div class="pt-6 border-t border-slate-800 text-center">
+            <button onclick="toggleAdmin()" class="text-xs text-slate-500 hover:text-slate-400 underline">🔒 관리자 모드</button>
+            <div id="adminPanel" class="hidden mt-4 p-4 bg-slate-800 border border-slate-700 rounded-xl space-y-3">
+                <p class="text-xs font-bold text-pink-400">관리자 전용 다운로드 센터</p>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <button onclick="downloadExcel()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow transition">📊 엑셀(.xlsx) 다운로드</button>
+                    <button onclick="downloadAllImages()" class="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow transition">🖼️ 합성 이미지 일괄 다운로드(ZIP)</button>
+                    <button onclick="downloadAllOriginals()" class="px-3 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-lg shadow transition">📷 원본 사진 일괄 다운로드(ZIP)</button>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="table-wrapper"><table id="adminTable"><thead><tr><th>NO</th><th>회사명</th><th>직급</th><th>이름</th><th>전화번호</th><th>이메일 주소</th><th>문의사항</th><th>저장시간</th></tr></thead><tbody id="adminDataTable"></tbody></table></div>
-</div>
 
-<script>
-    // [핵심] 파이어베이스 콘솔에서 복사한 내용을 여기에 붙여넣으세요!
-    const firebaseConfig = {
-        apiKey: "AIzaSyCvbDYGN9c3u1EDljYG0fOPX-xcPHDs_Jg",
-        authDomain: "fireexpo-5fee2.firebaseapp.com",
-        projectId: "fireexpo-5fee2",
-        storageBucket: "fireexpo-5fee2.firebasestorage.app",
-        messagingSenderId: "1054718901785",
-        appId: "1:1054718901785:web:a13a0a70d3a225870f3488"
-    };
+    <!-- 스크립트 로직 -->
+    <script>
+        // ==========================================
+        // [!] 기존에 사용하시던 파이어베이스 설정값 입력
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-    // Firebase 초기화
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+        // Firebase 초기화
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-    // 데이터 저장
-    async function submitForm() {
-        const company = document.getElementById('company').value;
-        const position = document.getElementById('position').value;
-        const name = document.getElementById('userName').value;
-        const phone = document.getElementById('userPhone').value;
-        const email = document.getElementById('userEmail').value;
-        const inquiry = document.getElementById('userInquiry').value;
+        let currentImageBase64 = "";
+        let currentOriginalBase64 = "";
+        let currentPositionType = 0; // 0: 좌측상단 대각선, 1: 우측상단 대각선, 2: 하단중앙
+        let allCardsData = [];
 
-        if (!name || !phone) { alert("성함과 전화번호는 반드시 입력해주셔야 합니다."); return; }
+        const imageInput = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const posChangeBtn = document.getElementById('posChangeBtn');
 
-        const btn = document.getElementById('saveBtn');
-        btn.disabled = true; btn.innerText = "저장 중...";
+        // 이미지 선택 시 처리 및 랜덤 위치 지정
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-        const now = new Date();
-        const saveTime = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    // 고화질 원본 보관 (리사이즈 없이)
+                    currentOriginalBase64 = event.target.result;
 
-        try {
-            await db.collection("leads").add({ company, position, name, phone, email, inquiry, saveTime, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("소중한 문의가 클라우드 서버에 안전하게 저장되었습니다.");
-            document.querySelectorAll('input, textarea').forEach(input => input.value = '');
-        } catch (e) {
-            alert("저장 실패: " + e.message);
-        } finally {
-            btn.disabled = false; btn.innerText = "저장하기";
+                    // 동영상 제작에 적합한 표준 규격(가로 800px 기준)으로 리사이즈 및 합성 준비
+                    currentPositionType = Math.floor(Math.random() * 3); // 0, 1, 2 랜덤
+                    previewContainer.classList.remove('hidden');
+                    posChangeBtn.classList.remove('hidden');
+                    updatePreviewCanvas(img);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // 위치 순환 변경 버튼
+        function cyclePosition() {
+            currentPositionType = (currentPositionType + 1) % 3;
+            const file = imageInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() { updatePreviewCanvas(img); };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
         }
-    }
 
-    // 관리자 모드
-    function requestAdminAccess() {
-        const pw = prompt("비밀번호를 입력하세요.");
-        if (pw === "jkd7102!!") { openAdmin(); }
-        else if (pw !== null) { alert("틀렸습니다."); }
-    }
+        // 캔버스에 이미지 카드 합성 그리기
+        function updatePreviewCanvas(img) {
+            const canvas = document.getElementById('previewCanvas');
+            const ctx = canvas.getContext('2d');
 
-    async function openAdmin() {
-        const tableBody = document.getElementById('adminDataTable');
-        tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">불러오는 중...</td></tr>';
-        document.getElementById('adminOverlay').style.display = 'block';
+            // 캔버스 기본 규격 설정 (정사각형 비율 800x800)
+            const size = 800;
+            canvas.width = size;
+            canvas.height = size;
 
-        try {
-            const snapshot = await db.collection("leads").orderBy("timestamp", "desc").get();
-            tableBody.innerHTML = '';
-            let index = 1;
-            snapshot.forEach(doc => {
-                const item = doc.data();
-                tableBody.innerHTML += `<tr><td>${index++}</td><td>${item.company}</td><td>${item.position}</td><td>${item.name}</td><td>${item.phone}</td><td>${item.email}</td><td>${item.inquiry.replace(/\n/g, '<br>')}</td><td>${item.saveTime}</td></tr>`;
+            // 1. 이미지 중앙 크롭(Square) 맞춤
+            let w = img.width;
+            let h = img.height;
+            let sourceX = 0, sourceY = 0, sourceW = w, sourceH = h;
+
+            if (w > h) {
+                sourceW = h;
+                sourceX = (w - h) / 2;
+            } else {
+                sourceH = w;
+                sourceY = (h - w) / 2;
+            }
+            ctx.drawImage(img, sourceX, sourceY, sourceW, sourceH, 0, 0, size, size);
+
+            const club = document.getElementById('clubName').value || "소속";
+            const author = document.getElementById('authorName').value || "이름";
+            const msg = document.getElementById('message').value || "축하 메시지입니다!";
+
+            // 2. 선택된 위치 타입에 따른 디자인 렌더링
+            ctx.save();
+            if (currentPositionType === 2) {
+                // [타입 2] 하단 중앙 수평형
+                const grad = ctx.createLinearGradient(0, size - 220, 0, size);
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, size - 220, size, 220);
+
+                ctx.fillStyle = '#f472b6'; // 핑크 포인트
+                ctx.font = 'bold 32px Pretendard, sans-serif';
+                ctx.fillText(`[${club}] ${author}`, 40, size - 130);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '28px Pretendard, sans-serif';
+                wrapText(ctx, msg, 40, size - 80, size - 80, 36);
+            } else {
+                // [타입 0 또는 1] 모서리 대각선 스타일 (얼굴 가림 방지)
+                const isRight = (currentPositionType === 1);
+                const boxW = 450, boxH = 180;
+                const boxX = isRight ? size - boxW - 30 : 30;
+                const boxY = 30;
+
+                // 반투명 배경 박스
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+                ctx.roundRect(boxX, boxY, boxW, boxH, 20);
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(244, 114, 182, 0.4)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 텍스트 내용 작성
+                ctx.fillStyle = '#f472b6';
+                ctx.font = 'bold 28px Pretendard, sans-serif';
+                ctx.fillText(`[${club}] ${author}`, boxX + 25, boxY + 50);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '24px Pretendard, sans-serif';
+                wrapText(ctx, msg, boxX + 25, boxY + 95, boxW - 50, 30);
+            }
+            ctx.restore();
+
+            // 최종 합성본 Base64 저장
+            currentImageBase64 = canvas.toDataURL('image/jpeg', 0.9);
+        }
+
+        // 줄바꿈 헬퍼 함수
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            let words = text.split('');
+            let line = '';
+            let lineCount = 0;
+
+            for (let n = 0; n < words.length; n++) {
+                let testLine = line + words[n];
+                let metrics = ctx.measureText(testLine);
+                let testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) {
+                    ctx.fillText(line, x, y);
+                    line = words[n];
+                    y += lineHeight;
+                    lineCount++;
+                    if (lineCount >= 2) { // 최대 2줄까지만 표시 후 말줄임
+                        line += '...';
+                        break;
+                    }
+                } else {
+                    line = testLine;
+                }
+            }
+            ctx.fillText(line, x, y);
+        }
+
+        // 입력 폼 변경 시 실시간 미리보기 갱신
+        document.getElementById('clubName').addEventListener('input', refreshCanvas);
+        document.getElementById('authorName').addEventListener('input', refreshCanvas);
+        document.getElementById('message').addEventListener('input', refreshCanvas);
+
+        function refreshCanvas() {
+            const file = imageInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() { updatePreviewCanvas(img); };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 메시지 등록 함수
+        function submitCard() {
+            const club = document.getElementById('clubName').value.trim();
+            const author = document.getElementById('authorName').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!club || !author || !message) {
+                alert('소속, 이름, 축하 메시지를 모두 입력해주세요!');
+                return;
+            }
+            if (!currentImageBase64) {
+                alert('본인 사진을 첨부해주세요!');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = '등록 중입니다...';
+
+            const newPostRef = db.ref('anniversary_cards').push();
+            newPostRef.set({
+                club: club,
+                author: author,
+                message: message,
+                image: currentImageBase64,
+                originalImage: currentOriginalBase64,
+                timestamp: Date.now()
+            }, function(error) {
+                if (error) {
+                    alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = '🚀 축하 메시지 등록하기';
+                } else {
+                    alert('🎉 타보까 1주년 축하 메시지가 성공적으로 등록되었습니다!');
+                    // 입력창 초기화
+                    document.getElementById('clubName').value = '';
+                    document.getElementById('authorName').value = '';
+                    document.getElementById('message').value = '';
+                    imageInput.value = '';
+                    previewContainer.classList.add('hidden');
+                    posChangeBtn.classList.add('hidden');
+                    currentImageBase64 = '';
+                    currentOriginalBase64 = '';
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = '🚀 축하 메시지 등록하기';
+                }
             });
-        } catch (e) { alert("오류: " + e.message); }
-    }
+        }
 
-    function closeAdmin() { document.getElementById('adminOverlay').style.display = 'none'; }
+        // 실시간 데이터 불러오기 및 리스트 렌더링
+        db.ref('anniversary_cards').on('value', function(snapshot) {
+            const cardList = document.getElementById('cardList');
+            cardList.innerHTML = '';
+            allCardsData = [];
 
-    // 엑셀 다운로드
-    async function downloadCSV() {
-        try {
-            const snapshot = await db.collection("leads").orderBy("timestamp", "desc").get();
-            let csv = "\uFEFFNO,회사명,직급,이름,전화번호,이메일 주소,문의사항,저장시간\n";
-            let index = 1;
-            snapshot.forEach(doc => {
-                const item = doc.data();
-                csv += `${index++},"${item.company}","${item.position}","${item.name}","${item.phone}","${item.email}","${item.inquiry.replace(/\n/g," ")}","${item.saveTime}"\n`;
+            let count = 0;
+            snapshot.forEach(function(childSnapshot) {
+                const data = childSnapshot.val();
+                data.id = childSnapshot.key;
+                allCardsData.push(data);
+                count++;
             });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `FERD_Lead_List_${new Date().toISOString().slice(0,10)}.csv`;
-            link.click();
-        } catch (e) { alert("다운로드 실패"); }
-    }
-</script>
+
+            // 최신순 정렬
+            allCardsData.sort((a, b) => b.timestamp - a.timestamp);
+            document.getElementById('totalCount').innerText = count;
+
+            if (allCardsData.length === 0) {
+                cardList.innerHTML = '<p class="col-span-2 text-center text-slate-500 py-8">아직 등록된 축하 메시지가 없습니다. 첫 주인공이 되어주세요!</p>';
+                return;
+            }
+
+            allCardsData.forEach((item, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-md flex flex-col';
+                cardDiv.innerHTML = `
+                    <div class="relative">
+                        <img src="${item.image}" alt="축하카드" class="w-full h-auto object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
+                        <div>
+                            <span class="text-xs font-semibold text-pink-400">[${escapeHtml(item.club)}] ${escapeHtml(item.author)}</span>
+                            <p class="text-sm text-slate-200 mt-1 leading-snug">${escapeHtml(item.message)}</p>
+                        </div>
+                        <span class="text-[10px] text-slate-500 text-right">${new Date(item.timestamp).toLocaleString()}</span>
+                    </div>
+                `;
+                cardList.appendChild(cardDiv);
+            });
+        });
+
+        // HTML Escape 헬퍼
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // 관리자 모드 토글
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            if (panel.classList.contains('hidden')) {
+                const pw = prompt('관리자 비밀번호를 입력하세요:');
+                if (pw === '1234') { // 기본 비밀번호 (필요시 변경 가능)
+                    panel.classList.remove('hidden');
+                } else if (pw !== null) {
+                    alert('비밀번호가 틀렸습니다.');
+                }
+            } else {
+                panel.classList.add('hidden');
+            }
+        }
+
+        // 1. 엑셀(.xlsx) 다운로드
+        function downloadExcel() {
+            if (allCardsData.length === 0) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+            const excelData = allCardsData.map((item, idx) => ({
+                "번호": idx + 1,
+                "작성시간": new Date(item.timestamp).toLocaleString(),
+                "소속": item.club,
+                "이름": item.author,
+                "축하메세지": item.message
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "타보까1주년방명록");
+            XLSX.writeFile(workbook, "Tabogga_1st_Anniversary_List.xlsx");
+        }
+
+        // 2. 완성된 이미지 카드 일괄 다운로드 (ZIP)
+        function downloadAllImages() {
+            if (allCardsData.length === 0) {
+                alert('다운로드할 이미지가 없습니다.');
+                return;
+            }
+            const zip = new JSZip();
+            const imgFolder = zip.folder("Tabogga_Anniversary_Cards");
+
+            allCardsData.forEach((item, idx) => {
+                const paddedNum = String(idx + 1).padStart(3, '0');
+                const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
+                const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
+                const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}.jpg`;
+                
+                // Base64 데이터 파싱
+                const base64Data = item.image.split(';base64,')[1];
+                imgFolder.file(fileName, base64Data, { base64: true });
+            });
+
+            zip.generateAsync({ type: "blob" }).then(function(content) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = "Tabogga_Anniversary_Cards.zip";
+                link.click();
+            });
+        }
+
+        // 3. 원본 사진 일괄 다운로드 (ZIP)
+        function downloadAllOriginals() {
+            if (allCardsData.length === 0) {
+                alert('다운로드할 원본 사진이 없습니다.');
+                return;
+            }
+            const zip = new JSZip();
+            const imgFolder = zip.folder("Tabogga_Original_Photos");
+
+            allCardsData.forEach((item, idx) => {
+                if (!item.originalImage) return;
+                const paddedNum = String(idx + 1).padStart(3, '0');
+                const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
+                const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
+                const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}_original.jpg`;
+                
+                const base64Data = item.originalImage.split(';base64,')[1];
+                if (base64Data) {
+                    imgFolder.file(fileName, base64Data, { base64: true });
+                }
+            });
+
+            zip.generateAsync({ type: "blob" }).then(function(content) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = "Tabogga_Original_Photos.zip";
+                link.click();
+            });
+        }
+    </script>
 </body>
 </html>
