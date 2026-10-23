@@ -38,7 +38,7 @@
                 <img src="111.jpg" alt="타보까 1주년 메인 이미지" class="w-full h-auto object-cover block" onerror="this.src='https://via.placeholder.com/600x400/f3f4f6/9ca3af?text=111.jpg';">
             </div>
 
-            <div class="px-1 pt-1 text-gray-800 leading-snug text-[14px] sm:text-base break-keep space-y-2">
+            <div class="px-1 pt-1 text-gray-800 leading-snug text-base sm:text-sm break-keep space-y-2">
                 <p class="text-xl sm:text-2xl font-bold text-gray-900 pb-1">타보까 롤러클럽이 벌써 1주년!</p>
                 <p>미끄러지듯 달려온 한 해, 덕분에 우리는 오늘도 바퀴 위에서 제일 멋진 사람들입니다.</p>
                 <p>여러분의 따뜻한 축하, 이번에는 정중히 사양하지 않겠습니다^^</p>
@@ -46,45 +46,44 @@
             </div>
         </div>
 
-        <!-- 2. 서브 안내 멘트 영역 (세로 간격 축소) -->
+        <!-- 2. 서브 안내 멘트 영역 (입력 칸 글자 크기와 동일하게 통일) -->
         <div class="bg-gray-50 border border-gray-200 py-3.5 px-4 rounded-2xl text-center shadow-xs break-keep space-y-1 leading-snug">
-            <p class="text-gray-800 font-semibold text-[14px] sm:text-base">본인 사진과 함께 축하메세지를 작성해주세요!</p>
-            <p class="text-gray-800 font-semibold text-[14px] sm:text-base">우리 타보까 아이들이 정말 좋아할겁니다!</p>
+            <p class="text-gray-800 font-semibold text-base sm:text-sm">본인 사진과 함께 축하메세지를 작성해주세요!</p>
+            <p class="text-gray-800 font-semibold text-base sm:text-sm">우리 타보까 아이들이 정말 좋아할겁니다!</p>
         </div>
 
-        <!-- 3. 입력 폼 영역 (모바일 터치 및 화면 최적화) -->
+        <!-- 3. 입력 폼 영역 -->
         <div class="bg-white p-5 sm:p-7 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             
             <!-- ① 소속 입력칸 -->
             <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">소속</label>
+                <label class="block text-base sm:text-sm font-bold text-gray-700 mb-1">소속</label>
                 <input type="text" id="clubName" placeholder="클럽명 또는 지역을 입력해주세요 (예: 타보까)" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-gray-900 transition text-base sm:text-sm">
             </div>
 
             <!-- ② 이름 입력칸 -->
             <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">이름</label>
+                <label class="block text-base sm:text-sm font-bold text-gray-700 mb-1">이름</label>
                 <input type="text" id="authorName" placeholder="이름 또는 닉네임을 입력해주세요" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-gray-900 transition text-base sm:text-sm">
             </div>
 
             <!-- ③ 축하 메세지 입력칸 -->
             <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">축하메세지</label>
+                <label class="block text-base sm:text-sm font-bold text-gray-700 mb-1">축하메세지</label>
                 <textarea id="message" rows="3" placeholder="따뜻한 축하 메시지를 남겨주세요!" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-gray-900 transition text-base sm:text-sm"></textarea>
             </div>
 
             <!-- ④ 이미지 첨부 영역 -->
             <div>
                 <div class="flex justify-between items-center mb-1">
-                    <label class="block text-xs font-bold text-gray-600">사진 첨부</label>
-                    <button type="button" id="posChangeBtn" onclick="cyclePosition()" class="text-xs font-semibold text-blue-600 hover:text-blue-500 hidden cursor-pointer">🔄 글씨 위치 변경</button>
+                    <label class="block text-base sm:text-sm font-bold text-gray-700">사진 첨부</label>
                 </div>
-                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs sm:text-sm text-gray-500 file:mr-3 file:py-2.5 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-gray-700 file:cursor-pointer cursor-pointer bg-gray-50 border border-gray-200 rounded-xl">
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-base sm:text-sm text-gray-500 file:mr-3 file:py-2.5 file:px-3.5 file:rounded-xl file:border-0 file:text-base sm:file:text-sm file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-gray-700 file:cursor-pointer cursor-pointer bg-gray-50 border border-gray-200 rounded-xl">
             </div>
 
             <!-- 미리보기 영역 -->
             <div id="previewContainer" class="hidden space-y-2 pt-1">
-                <span class="block text-xs font-bold text-gray-500 text-center">이미지 카드 미리보기</span>
+                <span class="block text-base sm:text-sm font-bold text-gray-500 text-center">이미지 카드 미리보기</span>
                 <div class="relative rounded-xl overflow-hidden border border-gray-200 max-w-xs mx-auto shadow-xs">
                     <canvas id="previewCanvas" class="w-full h-auto block"></canvas>
                 </div>
@@ -92,7 +91,7 @@
 
             <!-- 등록하기 버튼 -->
             <div class="pt-1">
-                <button onclick="submitCard()" id="submitBtn" class="w-full py-3.5 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl shadow-xs transition active:scale-[0.99] cursor-pointer text-sm sm:text-base">
+                <button onclick="submitCard()" id="submitBtn" class="w-full py-3.5 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl shadow-xs transition active:scale-[0.99] cursor-pointer text-base sm:text-sm">
                     축하메세지 등록하기
                 </button>
             </div>
@@ -101,8 +100,8 @@
         <!-- 4. 실시간 방명록 리스트 -->
         <div class="space-y-3.5 pt-2">
             <div class="flex items-center justify-between border-b border-gray-200 pb-2.5 px-1">
-                <h3 class="text-sm sm:text-base font-bold text-gray-900">축하 메시지 모음</h3>
-                <span class="text-xs font-semibold text-gray-500">총 <strong id="totalCount" class="text-gray-900">0</strong>건</span>
+                <h3 class="text-base sm:text-sm font-bold text-gray-900">축하 메시지 모음</h3>
+                <span class="text-base sm:text-sm font-semibold text-gray-500">총 <strong id="totalCount" class="text-gray-900">0</strong>건</span>
             </div>
             <div id="cardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <!-- 동적 카드 삽입 -->
@@ -111,13 +110,13 @@
 
         <!-- 5. 관리자 다운로드 영역 -->
         <div class="pt-6 border-t border-gray-100 text-center">
-            <button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 underline cursor-pointer">관리자 모드</button>
+            <button onclick="toggleAdmin()" class="text-base sm:text-sm text-gray-400 hover:text-gray-600 underline cursor-pointer">관리자 모드</button>
             <div id="adminPanel" class="hidden mt-3 p-4 bg-gray-50 border border-gray-200 rounded-2xl space-y-3">
-                <p class="text-xs font-bold text-gray-700">관리자 전용 다운로드</p>
+                <p class="text-base sm:text-sm font-bold text-gray-700">관리자 전용 다운로드</p>
                 <div class="flex flex-wrap gap-2 justify-center">
-                    <button onclick="downloadExcel()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-xs transition cursor-pointer">엑셀(.xlsx) 다운로드</button>
-                    <button onclick="downloadAllImages()" class="px-3.5 py-2 bg-gray-800 hover:bg-gray-700 text-white text-xs font-semibold rounded-lg shadow-xs transition cursor-pointer">합성 이미지 일괄 다운로드(ZIP)</button>
-                    <button onclick="downloadAllOriginals()" class="px-3.5 py-2 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 text-xs font-semibold rounded-lg shadow-xs transition cursor-pointer">원본 사진 일괄 다운로드(ZIP)</button>
+                    <button onclick="downloadExcel()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-base sm:text-sm font-semibold rounded-lg shadow-xs transition cursor-pointer">엑셀(.xlsx) 다운로드</button>
+                    <button onclick="downloadAllImages()" class="px-3.5 py-2 bg-gray-800 hover:bg-gray-700 text-white text-base sm:text-sm font-semibold rounded-lg shadow-xs transition cursor-pointer">합성 이미지 일괄 다운로드(ZIP)</button>
+                    <button onclick="downloadAllOriginals()" class="px-3.5 py-2 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 text-base sm:text-sm font-semibold rounded-lg shadow-xs transition cursor-pointer">원본 사진 일괄 다운로드(ZIP)</button>
                 </div>
             </div>
         </div>
@@ -129,6 +128,7 @@
         const firebaseConfig = {
           apiKey: "AIzaSyCvbDYGN9c3u1EDljYG0f0PX-xcPHDs_Jg",
           authDomain: "fireexpo-5fee2.firebaseapp.com",
+          databaseURL: "https://fireexpo-5fee2-default-rtdb.asia-southeast1.firebasedatabase.app",
           projectId: "fireexpo-5fee2",
           storageBucket: "fireexpo-5fee2.firebasestorage.app",
           messagingSenderId: "1054718901785",
@@ -141,14 +141,12 @@
 
         let currentImageBase64 = "";
         let currentOriginalBase64 = "";
-        let currentPositionType = 0; // 0: 좌측상단 대각선, 1: 우측상단 대각선, 2: 하단중앙
         let allCardsData = [];
 
         const imageInput = document.getElementById('imageInput');
         const previewContainer = document.getElementById('previewContainer');
-        const posChangeBtn = document.getElementById('posChangeBtn');
 
-        // 이미지 선택 시 처리 및 랜덤 위치 지정
+        // 이미지 선택 시 처리
         imageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -157,13 +155,26 @@
             reader.onload = function(event) {
                 const img = new Image();
                 img.onload = function() {
-                    // 고화질 원본 보관 (리사이즈 없이)
-                    currentOriginalBase64 = event.target.result;
+                    // 원본 보관용 이미지 생성 (전송 오류 방지를 위해 최대 폭 1200px 고화질 유지)
+                    const origCanvas = document.createElement('canvas');
+                    const maxOrigSize = 1200;
+                    let ow = img.width;
+                    let oh = img.height;
+                    if (ow > maxOrigSize || oh > maxOrigSize) {
+                        if (ow > oh) {
+                            oh = Math.round((oh * maxOrigSize) / ow);
+                            ow = maxOrigSize;
+                        } else {
+                            ow = Math.round((ow * maxOrigSize) / oh);
+                            oh = maxOrigSize;
+                        }
+                    }
+                    origCanvas.width = ow;
+                    origCanvas.height = oh;
+                    origCanvas.getContext('2d').drawImage(img, 0, 0, ow, oh);
+                    currentOriginalBase64 = origCanvas.toDataURL('image/jpeg', 0.9);
 
-                    // 동영상 제작에 적합한 표준 규격(가로 800px 기준)으로 리사이즈 및 합성 준비
-                    currentPositionType = Math.floor(Math.random() * 3); // 0, 1, 2 랜덤
                     previewContainer.classList.remove('hidden');
-                    posChangeBtn.classList.remove('hidden');
                     updatePreviewCanvas(img);
                 };
                 img.src = event.target.result;
@@ -171,21 +182,7 @@
             reader.readAsDataURL(file);
         });
 
-        // 위치 순환 변경 버튼
-        function cyclePosition() {
-            currentPositionType = (currentPositionType + 1) % 3;
-            const file = imageInput.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() { updatePreviewCanvas(img); };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 캔버스에 이미지 카드 합성 그리기
+        // 캔버스에 이미지 카드 합성 그리기 (왼쪽 상부 고정 & 가로 길이 사진의 절반 제한)
         function updatePreviewCanvas(img) {
             const canvas = document.getElementById('previewCanvas');
             const ctx = canvas.getContext('2d');
@@ -213,77 +210,61 @@
             const author = document.getElementById('authorName').value || "이름";
             const msg = document.getElementById('message').value || "축하 메시지입니다!";
 
-            // 2. 선택된 위치 타입에 따른 디자인 렌더링
+            // 2. 왼쪽 상부 배치 및 가로 길이 사진의 절반(400px 이내) 제한
             ctx.save();
-            if (currentPositionType === 2) {
-                // [타입 2] 하단 중앙 수평형
-                const grad = ctx.createLinearGradient(0, size - 220, 0, size);
-                grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(1, 'rgba(0,0,0,0.85)');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, size - 220, size, 220);
+            const startX = 30;
+            const startY = 55;
+            const halfMaxWidth = (size / 2) - startX; // 사진 절반(400px)까지만 텍스트 배치
 
-                ctx.fillStyle = '#f472b6';
-                ctx.font = 'bold 32px NexonLv2Gothic, sans-serif';
-                ctx.fillText(`[${club}] ${author}`, 40, size - 130);
+            // [소속] 이름: 노란색 글씨 + 얇은 검정색 테두리
+            ctx.font = 'bold 28px NexonLv2Gothic, sans-serif';
+            ctx.fillStyle = '#ffff00';
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3;
+            ctx.lineJoin = 'round';
+            const nextY = wrapText(ctx, `[${club}] ${author}`, startX, startY, halfMaxWidth, 36, true);
 
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '28px NexonLv2Gothic, sans-serif';
-                wrapText(ctx, msg, 40, size - 80, size - 80, 36);
-            } else {
-                // [타입 0 또는 1] 모서리 대각선 스타일 (얼굴 가림 방지)
-                const isRight = (currentPositionType === 1);
-                const boxW = 450, boxH = 180;
-                const boxX = isRight ? size - boxW - 30 : 30;
-                const boxY = 30;
+            // 축하메세지: 순수 흰색 글씨
+            ctx.font = '24px NexonLv2Gothic, sans-serif';
+            ctx.fillStyle = '#ffffff';
+            wrapText(ctx, msg, startX, nextY + 8, halfMaxWidth, 32, false);
 
-                // 반투명 배경 박스
-                ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-                ctx.roundRect(boxX, boxY, boxW, boxH, 20);
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                // 텍스트 내용 작성
-                ctx.fillStyle = '#f472b6';
-                ctx.font = 'bold 28px NexonLv2Gothic, sans-serif';
-                ctx.fillText(`[${club}] ${author}`, boxX + 25, boxY + 50);
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '24px NexonLv2Gothic, sans-serif';
-                wrapText(ctx, msg, boxX + 25, boxY + 95, boxW - 50, 30);
-            }
             ctx.restore();
 
             // 최종 합성본 Base64 저장
             currentImageBase64 = canvas.toDataURL('image/jpeg', 0.9);
         }
 
-        // 줄바꿈 헬퍼 함수
-        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-            let words = text.split('');
+        // 줄바꿈 헬퍼 함수 (가로 길이 제한 및 테두리 옵션 지원)
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight, isStroked) {
+            let chars = text.split('');
             let line = '';
-            let lineCount = 0;
 
-            for (let n = 0; n < words.length; n++) {
-                let testLine = line + words[n];
-                let metrics = ctx.measureText(testLine);
-                let testWidth = metrics.width;
-                if (testWidth > maxWidth && n > 0) {
+            for (let n = 0; n < chars.length; n++) {
+                if (chars[n] === '\n') {
+                    if (isStroked) ctx.strokeText(line, x, y);
                     ctx.fillText(line, x, y);
-                    line = words[n];
+                    line = '';
                     y += lineHeight;
-                    lineCount++;
-                    if (lineCount >= 2) {
-                        line += '...';
-                        break;
-                    }
+                    continue;
+                }
+                let testLine = line + chars[n];
+                let metrics = ctx.measureText(testLine);
+                if (metrics.width > maxWidth && line.length > 0) {
+                    if (isStroked) ctx.strokeText(line, x, y);
+                    ctx.fillText(line, x, y);
+                    line = chars[n];
+                    y += lineHeight;
                 } else {
                     line = testLine;
                 }
             }
-            ctx.fillText(line, x, y);
+            if (line.length > 0) {
+                if (isStroked) ctx.strokeText(line, x, y);
+                ctx.fillText(line, x, y);
+                y += lineHeight;
+            }
+            return y;
         }
 
         // 입력 폼 변경 시 실시간 미리보기 갱신
@@ -332,7 +313,7 @@
                 timestamp: Date.now()
             }, function(error) {
                 if (error) {
-                    alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    alert('등록 중 오류가 발생했습니다: ' + error.message);
                     submitBtn.disabled = false;
                     submitBtn.innerText = '축하메세지 등록하기';
                 } else {
@@ -343,7 +324,6 @@
                     document.getElementById('message').value = '';
                     imageInput.value = '';
                     previewContainer.classList.add('hidden');
-                    posChangeBtn.classList.add('hidden');
                     currentImageBase64 = '';
                     currentOriginalBase64 = '';
                     submitBtn.disabled = false;
@@ -371,7 +351,7 @@
             document.getElementById('totalCount').innerText = count;
 
             if (allCardsData.length === 0) {
-                cardList.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10 text-sm">아직 등록된 축하 메시지가 없습니다. 첫 주인공이 되어주세요!</p>';
+                cardList.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10 text-base sm:text-sm">아직 등록된 축하 메시지가 없습니다. 첫 주인공이 되어주세요!</p>';
                 return;
             }
 
@@ -384,10 +364,10 @@
                     </div>
                     <div class="p-3.5 flex-1 flex flex-col justify-between space-y-1.5">
                         <div>
-                            <span class="text-xs font-bold text-gray-900">[${escapeHtml(item.club)}] ${escapeHtml(item.author)}</span>
-                            <p class="text-sm text-gray-700 mt-1 leading-snug break-keep">${escapeHtml(item.message)}</p>
+                            <span class="text-base sm:text-sm font-bold text-gray-900">[${escapeHtml(item.club)}] ${escapeHtml(item.author)}</span>
+                            <p class="text-base sm:text-sm text-gray-700 mt-1 leading-snug break-keep">${escapeHtml(item.message)}</p>
                         </div>
-                        <span class="text-[11px] text-gray-400 text-right">${new Date(item.timestamp).toLocaleString()}</span>
+                        <span class="text-xs text-gray-400 text-right">${new Date(item.timestamp).toLocaleString()}</span>
                     </div>
                 `;
                 cardList.appendChild(cardDiv);
