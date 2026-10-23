@@ -46,10 +46,13 @@
             </div>
         </div>
 
-        <!-- 2. 서브 안내 멘트 영역 (입력 칸 글자 크기와 동일하게 통일) -->
-        <div class="bg-gray-50 border border-gray-200 py-3.5 px-4 rounded-2xl text-center shadow-xs break-keep space-y-1 leading-snug">
-            <p class="text-gray-800 font-semibold text-base sm:text-sm">본인 사진과 함께 축하메세지를 작성해주세요!</p>
-            <p class="text-gray-800 font-semibold text-base sm:text-sm">우리 타보까 아이들이 정말 좋아할겁니다!</p>
+        <!-- 2. 서브 안내 멘트 영역 (222.jpg 캐릭터 이미지 + 2줄 문장 가로 배치) -->
+        <div class="bg-gray-50 border border-gray-200 py-3.5 px-4 rounded-2xl shadow-xs flex items-center justify-center gap-3 sm:gap-4">
+            <img src="222.jpg" alt="타보까 캐릭터" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl shrink-0" onerror="this.src='https://via.placeholder.com/80x80/e5e7eb/9ca3af?text=222.jpg';">
+            <div class="text-left break-keep space-y-1 leading-snug">
+                <p class="text-gray-800 font-semibold text-base sm:text-sm">본인 사진과 함께 축하메세지를 작성해주세요!</p>
+                <p class="text-gray-800 font-semibold text-base sm:text-sm">우리 타보까 아이들이 정말 좋아할겁니다!</p>
+            </div>
         </div>
 
         <!-- 3. 입력 폼 영역 -->
@@ -58,27 +61,27 @@
             <!-- ① 소속 입력칸 -->
             <div>
                 <label class="block text-base sm:text-sm font-bold text-gray-700 mb-1">소속</label>
-                <input type="text" id="clubName" placeholder="클럽명 또는 지역을 입력해주세요 (예: 타보까)" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-gray-900 transition text-base sm:text-sm">
+                <input type="text" id="clubName" placeholder="클럽명 또는 지역을 입력해주세요 (예: 타보까)" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-600 transition text-base sm:text-sm">
             </div>
 
             <!-- ② 이름 입력칸 -->
             <div>
                 <label class="block text-base sm:text-sm font-bold text-gray-700 mb-1">이름</label>
-                <input type="text" id="authorName" placeholder="이름 또는 닉네임을 입력해주세요" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-gray-900 transition text-base sm:text-sm">
+                <input type="text" id="authorName" placeholder="이름 또는 닉네임을 입력해주세요" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-600 transition text-base sm:text-sm">
             </div>
 
             <!-- ③ 축하 메세지 입력칸 -->
             <div>
                 <label class="block text-base sm:text-sm font-bold text-gray-700 mb-1">축하메세지</label>
-                <textarea id="message" rows="3" placeholder="따뜻한 축하 메시지를 남겨주세요!" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-gray-900 transition text-base sm:text-sm"></textarea>
+                <textarea id="message" rows="3" placeholder="따뜻한 축하 메시지를 남겨주세요!" class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-600 transition text-base sm:text-sm"></textarea>
             </div>
 
-            <!-- ④ 이미지 첨부 영역 -->
+            <!-- ④ 이미지 첨부 영역 (세련된 파란색 버튼 적용) -->
             <div>
                 <div class="flex justify-between items-center mb-1">
                     <label class="block text-base sm:text-sm font-bold text-gray-700">사진 첨부</label>
                 </div>
-                <input type="file" id="imageInput" accept="image/*" class="w-full text-base sm:text-sm text-gray-500 file:mr-3 file:py-2.5 file:px-3.5 file:rounded-xl file:border-0 file:text-base sm:file:text-sm file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-gray-700 file:cursor-pointer cursor-pointer bg-gray-50 border border-gray-200 rounded-xl">
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-base sm:text-sm text-gray-500 file:mr-3 file:py-2.5 file:px-3.5 file:rounded-xl file:border-0 file:text-base sm:file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer cursor-pointer bg-gray-50 border border-gray-200 rounded-xl">
             </div>
 
             <!-- 미리보기 영역 -->
@@ -89,9 +92,9 @@
                 </div>
             </div>
 
-            <!-- 등록하기 버튼 -->
+            <!-- 등록하기 버튼 (세련된 파란색 버튼 적용) -->
             <div class="pt-1">
-                <button onclick="submitCard()" id="submitBtn" class="w-full py-3.5 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl shadow-xs transition active:scale-[0.99] cursor-pointer text-base sm:text-sm">
+                <button onclick="submitCard()" id="submitBtn" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition active:scale-[0.99] cursor-pointer text-base sm:text-sm">
                     축하메세지 등록하기
                 </button>
             </div>
@@ -112,7 +115,7 @@
         <div class="pt-6 border-t border-gray-100 text-center">
             <button onclick="toggleAdmin()" class="text-base sm:text-sm text-gray-400 hover:text-gray-600 underline cursor-pointer">관리자 모드</button>
             <div id="adminPanel" class="hidden mt-3 p-4 bg-gray-50 border border-gray-200 rounded-2xl space-y-3">
-                <p class="text-base sm:text-sm font-bold text-gray-700">관리자 전용 다운로드</p>
+                <p class="text-base sm:text-sm font-bold text-gray-700">관리자 전용 다운로드 및 관리 (개별 카드 삭제 활성화됨)</p>
                 <div class="flex flex-wrap gap-2 justify-center">
                     <button onclick="downloadExcel()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-base sm:text-sm font-semibold rounded-lg shadow-xs transition cursor-pointer">엑셀(.xlsx) 다운로드</button>
                     <button onclick="downloadAllImages()" class="px-3.5 py-2 bg-gray-800 hover:bg-gray-700 text-white text-base sm:text-sm font-semibold rounded-lg shadow-xs transition cursor-pointer">합성 이미지 일괄 다운로드(ZIP)</button>
@@ -142,6 +145,7 @@
         let currentImageBase64 = "";
         let currentOriginalBase64 = "";
         let allCardsData = [];
+        let isAdminMode = false;
 
         const imageInput = document.getElementById('imageInput');
         const previewContainer = document.getElementById('previewContainer');
@@ -172,7 +176,7 @@
                     origCanvas.width = ow;
                     origCanvas.height = oh;
                     origCanvas.getContext('2d').drawImage(img, 0, 0, ow, oh);
-                    currentOriginalBase64 = origCanvas.toDataURL('image/jpeg', 0.9);
+                    currentOriginalBase64 = origCanvas.toDataURL('image/jpeg', 0.85);
 
                     previewContainer.classList.remove('hidden');
                     updatePreviewCanvas(img);
@@ -182,7 +186,15 @@
             reader.readAsDataURL(file);
         });
 
-        // 캔버스에 이미지 카드 합성 그리기 (왼쪽 상부 고정 & 가로 길이 사진의 절반 제한)
+        // 문장이 끝날 때('습니다, 했어요, 드려요, 합니다' 등) 다음 문장을 가로 한 줄 띄워서 줄바꿈 처리하는 함수
+        function formatMessageSentences(text) {
+            const endingRegex = /(습니다|합니다|입니다|됩니다|봅니다|갑니다|옵니다|줍니다|랍니다|했어요|드려요|해요|예요|이에요|네요|어요|아요|여요|게요|봐요|가요|와요|줘요|군요|바랍니다|기원합니다|되세요|하세요|화이팅|파이팅)((?:[.!?~^ㅎㅋ]+|\s+[.!?~^ㅎㅋ]+)*)(?:\r?\n|\s+)(?=\S)/g;
+            let formatted = text.replace(endingRegex, '$1$2\n\n');
+            formatted = formatted.replace(/\n{3,}/g, '\n\n');
+            return formatted;
+        }
+
+        // 캔버스에 이미지 카드 합성 그리기 (왼쪽 상부 배치 & 가로 길이 사진 절반 제한)
         function updatePreviewCanvas(img) {
             const canvas = document.getElementById('previewCanvas');
             const ctx = canvas.getContext('2d');
@@ -208,15 +220,16 @@
 
             const club = document.getElementById('clubName').value || "소속";
             const author = document.getElementById('authorName').value || "이름";
-            const msg = document.getElementById('message').value || "축하 메시지입니다!";
+            const rawMsg = document.getElementById('message').value || "축하 메시지입니다!";
+            const msg = formatMessageSentences(rawMsg);
 
-            // 2. 왼쪽 상부 배치 및 가로 길이 사진의 절반(400px 이내) 제한
+            // 2. 왼쪽 상부(조금 더 아래로 조정: startY = 85) 배치 및 가로 길이 사진 절반 제한
             ctx.save();
             const startX = 30;
-            const startY = 55;
+            const startY = 85;
             const halfMaxWidth = (size / 2) - startX; // 사진 절반(400px)까지만 텍스트 배치
 
-            // [소속] 이름: 노란색 글씨 + 얇은 검정색 테두리
+            // [소속] 이름: 볼드 처리 + 노란색 글씨 + 얇은 검정색 테두리
             ctx.font = 'bold 28px NexonLv2Gothic, sans-serif';
             ctx.fillStyle = '#ffff00';
             ctx.strokeStyle = '#000000';
@@ -224,27 +237,29 @@
             ctx.lineJoin = 'round';
             const nextY = wrapText(ctx, `[${club}] ${author}`, startX, startY, halfMaxWidth, 36, true);
 
-            // 축하메세지: 순수 흰색 글씨
-            ctx.font = '24px NexonLv2Gothic, sans-serif';
+            // 축하메세지: 볼드 처리 + 순수 흰색 글씨
+            ctx.font = 'bold 24px NexonLv2Gothic, sans-serif';
             ctx.fillStyle = '#ffffff';
-            wrapText(ctx, msg, startX, nextY + 8, halfMaxWidth, 32, false);
+            wrapText(ctx, msg, startX, nextY + 12, halfMaxWidth, 32, false);
 
             ctx.restore();
 
-            // 최종 합성본 Base64 저장
-            currentImageBase64 = canvas.toDataURL('image/jpeg', 0.9);
+            // 최종 합성본 Base64 저장 (용량 최적화 0.8)
+            currentImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
         }
 
-        // 줄바꿈 헬퍼 함수 (가로 길이 제한 및 테두리 옵션 지원)
+        // 줄바꿈 헬퍼 함수 (가로 길이 제한, 문장 간 한 줄 띄움 및 테두리 옵션 지원)
         function wrapText(ctx, text, x, y, maxWidth, lineHeight, isStroked) {
             let chars = text.split('');
             let line = '';
 
             for (let n = 0; n < chars.length; n++) {
                 if (chars[n] === '\n') {
-                    if (isStroked) ctx.strokeText(line, x, y);
-                    ctx.fillText(line, x, y);
-                    line = '';
+                    if (line.length > 0) {
+                        if (isStroked) ctx.strokeText(line, x, y);
+                        ctx.fillText(line, x, y);
+                        line = '';
+                    }
                     y += lineHeight;
                     continue;
                 }
@@ -284,7 +299,7 @@
             reader.readAsDataURL(file);
         }
 
-        // 메시지 등록 함수
+        // 메시지 등록 함수 (원본 사진은 별도 경로에 분리 저장하여 방문자 다운로드 용량 절감)
         function submitCard() {
             const club = document.getElementById('clubName').value.trim();
             const author = document.getElementById('authorName').value.trim();
@@ -304,12 +319,14 @@
             submitBtn.innerText = '등록 중입니다...';
 
             const newPostRef = db.ref('anniversary_cards').push();
+            const postKey = newPostRef.key;
+
+            // 1) 화면 리스트용 데이터 저장 (합성 이미지 카드만 포함)
             newPostRef.set({
                 club: club,
                 author: author,
                 message: message,
                 image: currentImageBase64,
-                originalImage: currentOriginalBase64,
                 timestamp: Date.now()
             }, function(error) {
                 if (error) {
@@ -317,7 +334,14 @@
                     submitBtn.disabled = false;
                     submitBtn.innerText = '축하메세지 등록하기';
                 } else {
-                    alert('🎉 타보까 1주년 축하 메시지가 성공적으로 등록되었습니다!');
+                    // 2) 관리자 백업용 원본 이미지는 별도 경로(anniversary_originals)에 저장
+                    if (currentOriginalBase64) {
+                        db.ref('anniversary_originals/' + postKey).set({
+                            originalImage: currentOriginalBase64
+                        });
+                    }
+
+                    alert('축하 메시지가 성공적으로 등록되었습니다!');
                     // 입력창 초기화
                     document.getElementById('clubName').value = '';
                     document.getElementById('authorName').value = '';
@@ -334,8 +358,6 @@
 
         // 실시간 데이터 불러오기 및 리스트 렌더링
         db.ref('anniversary_cards').on('value', function(snapshot) {
-            const cardList = document.getElementById('cardList');
-            cardList.innerHTML = '';
             allCardsData = [];
 
             let count = 0;
@@ -350,17 +372,28 @@
             allCardsData.sort((a, b) => b.timestamp - a.timestamp);
             document.getElementById('totalCount').innerText = count;
 
+            renderCardList();
+        });
+
+        // 카드 리스트 화면 출력 함수
+        function renderCardList() {
+            const cardList = document.getElementById('cardList');
+            cardList.innerHTML = '';
+
             if (allCardsData.length === 0) {
                 cardList.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10 text-base sm:text-sm">아직 등록된 축하 메시지가 없습니다. 첫 주인공이 되어주세요!</p>';
                 return;
             }
 
-            allCardsData.forEach((item, index) => {
+            allCardsData.forEach((item) => {
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs flex flex-col';
                 cardDiv.innerHTML = `
                     <div class="relative">
                         <img src="${item.image}" alt="축하카드" class="w-full h-auto object-cover">
+                        <button onclick="deleteCard('${item.id}')" class="admin-delete-btn ${isAdminMode ? '' : 'hidden'} absolute top-2.5 right-2.5 px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg shadow-md transition cursor-pointer">
+                            삭제
+                        </button>
                     </div>
                     <div class="p-3.5 flex-1 flex flex-col justify-between space-y-1.5">
                         <div>
@@ -372,7 +405,21 @@
                 `;
                 cardList.appendChild(cardDiv);
             });
-        });
+        }
+
+        // 관리자용 개별 이미지 카드 삭제 함수
+        function deleteCard(cardId) {
+            if (confirm('이 축하 메시지 카드를 정말 삭제하시겠습니까?')) {
+                db.ref('anniversary_cards/' + cardId).remove()
+                    .then(function() {
+                        db.ref('anniversary_originals/' + cardId).remove();
+                        alert('삭제되었습니다.');
+                    })
+                    .catch(function(error) {
+                        alert('삭제 중 오류가 발생했습니다: ' + error.message);
+                    });
+            }
+        }
 
         // HTML Escape 헬퍼
         function escapeHtml(str) {
@@ -384,13 +431,17 @@
             const panel = document.getElementById('adminPanel');
             if (panel.classList.contains('hidden')) {
                 const pw = prompt('관리자 비밀번호를 입력하세요:');
-                if (pw === '1234') {
+                if (pw === '89363341') {
+                    isAdminMode = true;
                     panel.classList.remove('hidden');
+                    renderCardList();
                 } else if (pw !== null) {
                     alert('비밀번호가 틀렸습니다.');
                 }
             } else {
+                isAdminMode = false;
                 panel.classList.add('hidden');
+                renderCardList();
             }
         }
 
@@ -441,33 +492,46 @@
             });
         }
 
-        // 3. 원본 사진 일괄 다운로드 (ZIP)
+        // 3. 원본 사진 일괄 다운로드 (ZIP - 별도 저장된 원본 데이터 불러오기)
         function downloadAllOriginals() {
             if (allCardsData.length === 0) {
                 alert('다운로드할 원본 사진이 없습니다.');
                 return;
             }
-            const zip = new JSZip();
-            const imgFolder = zip.folder("Tabogga_Original_Photos");
 
-            allCardsData.forEach((item, idx) => {
-                if (!item.originalImage) return;
-                const paddedNum = String(idx + 1).padStart(3, '0');
-                const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
-                const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
-                const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}_original.jpg`;
-                
-                const base64Data = item.originalImage.split(';base64,')[1];
-                if (base64Data) {
-                    imgFolder.file(fileName, base64Data, { base64: true });
+            db.ref('anniversary_originals').once('value').then(function(snapshot) {
+                const originalsMap = snapshot.val() || {};
+                const zip = new JSZip();
+                const imgFolder = zip.folder("Tabogga_Original_Photos");
+                let addedCount = 0;
+
+                allCardsData.forEach((item, idx) => {
+                    const origData = (originalsMap[item.id] && originalsMap[item.id].originalImage) || item.originalImage;
+                    if (!origData) return;
+
+                    const paddedNum = String(idx + 1).padStart(3, '0');
+                    const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
+                    const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
+                    const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}_original.jpg`;
+                    
+                    const base64Data = origData.split(';base64,')[1];
+                    if (base64Data) {
+                        imgFolder.file(fileName, base64Data, { base64: true });
+                        addedCount++;
+                    }
+                });
+
+                if (addedCount === 0) {
+                    alert('저장된 원본 사진이 없습니다.');
+                    return;
                 }
-            });
 
-            zip.generateAsync({ type: "blob" }).then(function(content) {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content);
-                link.download = "Tabogga_Original_Photos.zip";
-                link.click();
+                zip.generateAsync({ type: "blob" }).then(function(content) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(content);
+                    link.download = "Tabogga_Original_Photos.zip";
+                    link.click();
+                });
             });
         }
     </script>
