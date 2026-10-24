@@ -30,6 +30,12 @@
 </head>
 <body class="bg-white text-gray-800 min-h-screen py-6 px-3.5 sm:py-10 sm:px-4">
 
+    <!-- 초기 접속 로딩 화면 -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-3">
+        <div class="w-10 h-10 border-4 border-gray-200 border-t-slate-600 rounded-full animate-spin"></div>
+        <p class="text-base sm:text-sm font-bold text-gray-700">축하 메시지 카드를 불러오는 중입니다...</p>
+    </div>
+
     <div class="max-w-xl mx-auto space-y-5 sm:space-y-6">
         
         <!-- 1. 상단 이미지 (111.jpg - 테두리 제거) 및 1주년 인사말 영역 -->
@@ -236,10 +242,13 @@
             ctx.lineJoin = 'round';
             const nextY = wrapText(ctx, `[${club}] ${author}`, startX, startY, halfMaxWidth, 44, true);
 
-            // 축하메세지: 볼드 처리 + 순수 흰색 글씨 (줄간격 여백을 절반으로 촘촘하게 축소)
+            // 축하메세지: 볼드 처리 + 순수 흰색 글씨 + 얇은 검정색 테두리 (줄간격 여백을 절반으로 촘촘하게 축소)
             ctx.font = 'bold 32px NexonLv2Gothic, sans-serif';
             ctx.fillStyle = '#ffffff';
-            wrapText(ctx, msg, startX, nextY + 8, halfMaxWidth, 36, false);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3.5;
+            ctx.lineJoin = 'round';
+            wrapText(ctx, msg, startX, nextY + 8, halfMaxWidth, 36, true);
 
             ctx.restore();
 
@@ -383,6 +392,8 @@
 
             if (allCardsData.length === 0) {
                 cardList.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10 text-base sm:text-sm">아직 등록된 축하 메시지가 없습니다. 첫 주인공이 되어주세요!</p>';
+                const loader = document.getElementById('loadingOverlay');
+                if (loader) loader.classList.add('hidden');
                 return;
             }
 
@@ -406,6 +417,26 @@
                 `;
                 cardList.appendChild(cardDiv);
             });
+
+            const loader = document.getElementById('loadingOverlay');
+            if (loader && !loader.classList.contains('hidden')) {
+                const imgs = cardList.querySelectorAll('img');
+                let loadedCount = 0;
+                const checkAllLoaded = () => {
+                    loadedCount++;
+                    if (loadedCount >= imgs.length) {
+                        loader.classList.add('hidden');
+                    }
+                };
+                imgs.forEach((img) => {
+                    if (img.complete) {
+                        checkAllLoaded();
+                    } else {
+                        img.addEventListener('load', checkAllLoaded);
+                        img.addEventListener('error', checkAllLoaded);
+                    }
+                });
+            }
         }
 
         // 관리자용 개별 이미지 카드 삭제 함수
