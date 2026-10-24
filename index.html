@@ -33,7 +33,7 @@
     <!-- 초기 접속 로딩 화면 -->
     <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-3">
         <div class="w-10 h-10 border-4 border-gray-200 border-t-slate-600 rounded-full animate-spin"></div>
-        <p class="text-base sm:text-sm font-bold text-gray-700">축하 메시지 카드를 불러오는 중입니다...</p>
+        <p class="text-base sm:text-sm font-bold text-gray-700">페이지에 접속 중입니다...</p>
     </div>
 
     <div class="max-w-xl mx-auto space-y-5 sm:space-y-6">
@@ -112,7 +112,11 @@
                 <span class="text-base sm:text-sm font-semibold text-gray-500">총 <strong id="totalCount" class="text-gray-900">0</strong>건</span>
             </div>
             <div id="cardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <!-- 동적 카드 삽입 -->
+                <!-- 백그라운드 카드 로딩 중 표시 -->
+                <div class="col-span-1 sm:col-span-2 flex flex-col items-center justify-center py-10 space-y-2.5 text-gray-400">
+                    <div class="w-7 h-7 border-3 border-gray-200 border-t-slate-600 rounded-full animate-spin"></div>
+                    <p class="text-base sm:text-sm">축하 메시지 카드를 불러오는 중입니다...</p>
+                </div>
             </div>
         </div>
 
@@ -154,6 +158,14 @@
 
         const imageInput = document.getElementById('imageInput');
         const previewContainer = document.getElementById('previewContainer');
+
+        // 페이지 기본 요소 준비 및 이미지 카드 로딩 시작 시 즉시 화면 진입
+        window.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('loadingOverlay');
+            if (loader) {
+                loader.classList.add('hidden');
+            }
+        });
 
         // 이미지 선택 시 처리
         imageInput.addEventListener('change', function(e) {
@@ -230,6 +242,7 @@
 
             // 2. 왼쪽 상부 배치 및 가로 길이 사진 절반 제한 (1080 해상도 비례 적용)
             ctx.save();
+            ctx.textAlign = 'left';
             const startX = 40;
             const startY = 115;
             const halfMaxWidth = (size / 2) - startX; // 사진 절반(540px)까지만 텍스트 배치
@@ -256,9 +269,9 @@
             currentImageBase64 = canvas.toDataURL('image/jpeg', 0.88);
         }
 
-        // 줄바꿈 헬퍼 함수 (2~3줄 이상 시 줄간격 및 문장 간 빈 줄 간격 절반 축소 반영)
+        // 줄바꿈 헬퍼 함수 (모든 가로줄의 왼쪽 시작점 동일 정렬 & 줄간격 절반 축소 반영)
         function wrapText(ctx, text, x, y, maxWidth, lineHeight, isStroked) {
-            let chars = text.split('');
+            let chars = text.replace(/\r/g, '').split('');
             let line = '';
 
             for (let n = 0; n < chars.length; n++) {
@@ -273,12 +286,18 @@
                     }
                     continue;
                 }
+
+                // 각 가로줄의 시작 부분에 공백이 오면 무조건 건너뛰어 왼쪽 끝 정렬을 동일하게 유지
+                if (line.length === 0 && chars[n].trim() === '') {
+                    continue;
+                }
+
                 let testLine = line + chars[n];
                 let metrics = ctx.measureText(testLine);
                 if (metrics.width > maxWidth && line.length > 0) {
                     if (isStroked) ctx.strokeText(line, x, y);
                     ctx.fillText(line, x, y);
-                    line = chars[n];
+                    line = chars[n].trim() === '' ? '' : chars[n];
                     y += lineHeight;
                 } else {
                     line = testLine;
@@ -392,17 +411,17 @@
 
             if (allCardsData.length === 0) {
                 cardList.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10 text-base sm:text-sm">아직 등록된 축하 메시지가 없습니다. 첫 주인공이 되어주세요!</p>';
-                const loader = document.getElementById('loadingOverlay');
-                if (loader) loader.classList.add('hidden');
                 return;
             }
+
+            const fragment = document.createDocumentFragment();
 
             allCardsData.forEach((item) => {
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs flex flex-col';
                 cardDiv.innerHTML = `
                     <div class="relative">
-                        <img src="${item.image}" alt="축하카드" class="w-full h-auto object-cover">
+                        <img src="${item.image}" alt="축하카드" decoding="async" class="w-full h-auto object-cover">
                         <button onclick="deleteCard('${item.id}')" class="admin-delete-btn ${isAdminMode ? '' : 'hidden'} absolute top-2.5 right-2.5 px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg shadow-md transition cursor-pointer">
                             삭제
                         </button>
@@ -415,28 +434,10 @@
                         <span class="text-xs text-gray-400 text-right">${new Date(item.timestamp).toLocaleString()}</span>
                     </div>
                 `;
-                cardList.appendChild(cardDiv);
+                fragment.appendChild(cardDiv);
             });
 
-            const loader = document.getElementById('loadingOverlay');
-            if (loader && !loader.classList.contains('hidden')) {
-                const imgs = cardList.querySelectorAll('img');
-                let loadedCount = 0;
-                const checkAllLoaded = () => {
-                    loadedCount++;
-                    if (loadedCount >= imgs.length) {
-                        loader.classList.add('hidden');
-                    }
-                };
-                imgs.forEach((img) => {
-                    if (img.complete) {
-                        checkAllLoaded();
-                    } else {
-                        img.addEventListener('load', checkAllLoaded);
-                        img.addEventListener('error', checkAllLoaded);
-                    }
-                });
-            }
+            cardList.appendChild(fragment);
         }
 
         // 관리자용 개별 이미지 카드 삭제 함수
