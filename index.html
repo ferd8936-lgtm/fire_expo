@@ -107,9 +107,9 @@
 
         <!-- 4. 실시간 방명록 리스트 -->
         <div class="space-y-3.5 pt-2">
-            <div class="flex items-center justify-between border-b border-gray-200 pb-2.5 px-1">
-                <h3 class="text-base sm:text-sm font-bold text-gray-900">축하 메시지 모음</h3>
-                <span class="text-base sm:text-sm font-semibold text-gray-500">총 <strong id="totalCount" class="text-gray-900">0</strong>건</span>
+            <div class="border-b border-gray-200 pb-2.5 px-1 space-y-1">
+                <h3 class="text-lg sm:text-base font-bold text-gray-900">먼저 도착한 축하메시지</h3>
+                <p class="text-sm sm:text-xs text-gray-500">최근 메시지 10건을 소개합니다.</p>
             </div>
             <div id="cardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <!-- 백그라운드 카드 로딩 중 표시 -->
@@ -385,21 +385,18 @@
             });
         }
 
-        // 실시간 데이터 불러오기 및 리스트 렌더링
-        db.ref('anniversary_cards').on('value', function(snapshot) {
+        // 실시간 데이터 불러오기 및 리스트 렌더링 (최근 10건만 다운로드하여 용량 최소화)
+        db.ref('anniversary_cards').limitToLast(10).on('value', function(snapshot) {
             allCardsData = [];
 
-            let count = 0;
             snapshot.forEach(function(childSnapshot) {
                 const data = childSnapshot.val();
                 data.id = childSnapshot.key;
                 allCardsData.push(data);
-                count++;
             });
 
             // 최신순 정렬
             allCardsData.sort((a, b) => b.timestamp - a.timestamp);
-            document.getElementById('totalCount').innerText = count;
 
             renderCardList();
         });
