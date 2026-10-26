@@ -108,8 +108,8 @@
         <!-- 4. 실시간 방명록 리스트 -->
         <div class="space-y-3.5 pt-2">
             <div class="border-b border-gray-200 pb-2.5 px-1 space-y-1">
-                <h3 class="text-lg sm:text-base font-bold text-gray-900">먼저 도착한 축하메시지</h3>
-                <p class="text-sm sm:text-xs text-gray-500">최근 메시지 10건을 소개합니다.</p>
+                <h3 class="text-lg sm:text-base font-bold text-gray-900">먼저 도착한 축하메시지 <span class="text-base sm:text-sm font-semibold text-gray-500 ml-1">(총 <strong id="totalCount" class="text-gray-900">0</strong>건)</span></h3>
+                <p class="text-sm sm:text-xs text-gray-500">최근 메시지 10건만 소개합니다.</p>
             </div>
             <div id="cardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <!-- 백그라운드 카드 로딩 중 표시 -->
@@ -158,6 +158,19 @@
 
         const imageInput = document.getElementById('imageInput');
         const previewContainer = document.getElementById('previewContainer');
+
+        // 전체 등록 건수 조회 함수 (shallow=true를 사용하여 이미지 다운로드 없이 키 개수만 가볍게 확인)
+        function updateTotalCount() {
+            fetch(`${firebaseConfig.databaseURL}/anniversary_cards.json?shallow=true`)
+                .then(res => res.json())
+                .then(data => {
+                    const count = data ? Object.keys(data).length : 0;
+                    document.getElementById('totalCount').innerText = count;
+                })
+                .catch(() => {
+                    document.getElementById('totalCount').innerText = allCardsData.length;
+                });
+        }
 
         // 페이지 기본 요소 준비 및 이미지 카드 로딩 시작 시 즉시 화면 진입
         window.addEventListener('DOMContentLoaded', function() {
@@ -398,6 +411,9 @@
             // 최신순 정렬
             allCardsData.sort((a, b) => b.timestamp - a.timestamp);
 
+            // 전체 등록 건수 업데이트
+            updateTotalCount();
+
             renderCardList();
         });
 
@@ -443,6 +459,7 @@
                 db.ref('anniversary_cards/' + cardId).remove()
                     .then(function() {
                         db.ref('anniversary_originals/' + cardId).remove();
+                        updateTotalCount();
                         alert('삭제되었습니다.');
                     })
                     .catch(function(error) {
