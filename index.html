@@ -514,70 +514,96 @@
 
         // 2. 완성된 이미지 카드 일괄 다운로드 (ZIP)
         function downloadAllImages() {
-            if (allCardsData.length === 0) {
-                alert('다운로드할 이미지가 없습니다.');
-                return;
-            }
-            const zip = new JSZip();
-            const imgFolder = zip.folder("Tabogga_Anniversary_Cards");
+            db.ref('anniversary_cards').once('value').then(function(snapshot) {
+                const fullCardsData = [];
+                snapshot.forEach(function(childSnapshot) {
+                    const data = childSnapshot.val();
+                    data.id = childSnapshot.key;
+                    fullCardsData.push(data);
+                });
 
-            allCardsData.forEach((item, idx) => {
-                const paddedNum = String(idx + 1).padStart(3, '0');
-                const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
-                const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
-                const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}.jpg`;
-                
-                const base64Data = item.image.split(';base64,')[1];
-                imgFolder.file(fileName, base64Data, { base64: true });
-            });
+                if (fullCardsData.length === 0) {
+                    alert('다운로드할 이미지가 없습니다.');
+                    return;
+                }
 
-            zip.generateAsync({ type: "blob" }).then(function(content) {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content);
-                link.download = "Tabogga_Anniversary_Cards.zip";
-                link.click();
+                fullCardsData.sort((a, b) => b.timestamp - a.timestamp);
+
+                const zip = new JSZip();
+                const imgFolder = zip.folder("Tabogga_Anniversary_Cards");
+
+                fullCardsData.forEach((item, idx) => {
+                    if (!item.image) return;
+                    const paddedNum = String(idx + 1).padStart(3, '0');
+                    const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
+                    const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
+                    const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}.jpg`;
+                    
+                    const base64Data = item.image.split(';base64,')[1];
+                    if (base64Data) {
+                        imgFolder.file(fileName, base64Data, { base64: true });
+                    }
+                });
+
+                zip.generateAsync({ type: "blob" }).then(function(content) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(content);
+                    link.download = "Tabogga_Anniversary_Cards.zip";
+                    link.click();
+                });
             });
         }
 
         // 3. 원본 사진 일괄 다운로드 (ZIP - 별도 저장된 원본 데이터 불러오기)
         function downloadAllOriginals() {
-            if (allCardsData.length === 0) {
-                alert('다운로드할 원본 사진이 없습니다.');
-                return;
-            }
-
-            db.ref('anniversary_originals').once('value').then(function(snapshot) {
-                const originalsMap = snapshot.val() || {};
-                const zip = new JSZip();
-                const imgFolder = zip.folder("Tabogga_Original_Photos");
-                let addedCount = 0;
-
-                allCardsData.forEach((item, idx) => {
-                    const origData = (originalsMap[item.id] && originalsMap[item.id].originalImage) || item.originalImage;
-                    if (!origData) return;
-
-                    const paddedNum = String(idx + 1).padStart(3, '0');
-                    const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
-                    const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
-                    const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}_original.jpg`;
-                    
-                    const base64Data = origData.split(';base64,')[1];
-                    if (base64Data) {
-                        imgFolder.file(fileName, base64Data, { base64: true });
-                        addedCount++;
-                    }
+            db.ref('anniversary_cards').once('value').then(function(cardsSnapshot) {
+                const fullCardsData = [];
+                cardsSnapshot.forEach(function(childSnapshot) {
+                    const data = childSnapshot.val();
+                    data.id = childSnapshot.key;
+                    fullCardsData.push(data);
                 });
 
-                if (addedCount === 0) {
-                    alert('저장된 원본 사진이 없습니다.');
+                if (fullCardsData.length === 0) {
+                    alert('다운로드할 원본 사진이 없습니다.');
                     return;
                 }
 
-                zip.generateAsync({ type: "blob" }).then(function(content) {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(content);
-                    link.download = "Tabogga_Original_Photos.zip";
-                    link.click();
+                fullCardsData.sort((a, b) => b.timestamp - a.timestamp);
+
+                db.ref('anniversary_originals').once('value').then(function(snapshot) {
+                    const originalsMap = snapshot.val() || {};
+                    const zip = new JSZip();
+                    const imgFolder = zip.folder("Tabogga_Original_Photos");
+                    let addedCount = 0;
+
+                    fullCardsData.forEach((item, idx) => {
+                        const origData = (originalsMap[item.id] && originalsMap[item.id].originalImage) || item.originalImage;
+                        if (!origData) return;
+
+                        const paddedNum = String(idx + 1).padStart(3, '0');
+                        const cleanClub = item.club.replace(/[/\\?%*:|"<>]/g, '');
+                        const cleanAuthor = item.author.replace(/[/\\?%*:|"<>]/g, '');
+                        const fileName = `${paddedNum}_${cleanClub}_${cleanAuthor}_original.jpg`;
+                        
+                        const base64Data = origData.split(';base64,')[1];
+                        if (base64Data) {
+                            imgFolder.file(fileName, base64Data, { base64: true });
+                            addedCount++;
+                        }
+                    });
+
+                    if (addedCount === 0) {
+                        alert('저장된 원본 사진이 없습니다.');
+                        return;
+                    }
+
+                    zip.generateAsync({ type: "blob" }).then(function(content) {
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(content);
+                        link.download = "Tabogga_Original_Photos.zip";
+                        link.click();
+                    });
                 });
             });
         }
