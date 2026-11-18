@@ -1,122 +1,1778 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f5f6fb">
-<title>Word Guardians</title>
-<link rel="preload" href="fonts/NexonLv2Gothic.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>매스 블록 어드벤처 (Math Block Adventure) - 초등 1~6학년 액션 수학 게임</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-grad-1: #1e1b4b;
+      --bg-grad-2: #312e81;
+      --panel-bg: rgba(255, 255, 255, 0.12);
+      --panel-border: rgba(255, 255, 255, 0.25);
+      --accent-yellow: #facc15;
+      --accent-pink: #f43f5e;
+      --accent-cyan: #38bdf8;
+      --accent-green: #22c55e;
+      --text-white: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    body {
+      font-family: 'Jua', 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, #3b82f6 0%, var(--bg-grad-2) 45%, var(--bg-grad-1) 100%);
+      color: var(--text-white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      padding: 8px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* 상단 헤더 & 컨트롤 바 */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 2px solid var(--panel-border);
+      border-radius: 18px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.35rem;
+      color: var(--accent-yellow);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .stats-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stat-pill.coin { color: var(--accent-yellow); }
+    .stat-pill.combo { color: #fb923c; }
+
+    .btn-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ui-btn {
+      font-family: 'Jua', sans-serif;
+      border: none;
+      border-radius: 12px;
+      padding: 7px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: #0f172a;
+      background: #e2e8f0;
+      box-shadow: 0 4px 0 #94a3b8;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ui-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #94a3b8;
+    }
+
+    .ui-btn.active {
+      background: var(--accent-yellow);
+      box-shadow: 0 4px 0 #ca8a04;
+    }
+
+    .ui-btn.shop-btn {
+      background: #f472b6;
+      color: white;
+      box-shadow: 0 4px 0 #db2777;
+    }
+
+    /* 학년 & 모드 선택 탭 */
+    .selector-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 8px 12px;
+    }
+
+    .grade-tabs, .mode-tabs {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .tab-btn {
+      font-family: 'Jua', sans-serif;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      padding: 6px 11px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255,255,255,0.18);
+      color: white;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: white;
+      border-color: #7dd3fc;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+      transform: scale(1.03);
+    }
+
+    .mode-tabs .tab-btn.active {
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      border-color: #fda4af;
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.5);
+    }
+
+    /* 메인 게임 캔버스 래퍼 */
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      background: #0f172a;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45);
+      aspect-ratio: 16 / 10;
+      max-height: 540px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* 모바일 & 태블릿용 아케이드 컨트롤 패드 */
+    .controls-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr 1.2fr;
+      gap: 10px;
+      width: 100%;
+      padding-top: 2px;
+    }
+
+    .ctrl-btn {
+      font-family: 'Jua', sans-serif;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 8px;
+      font-size: 1.15rem;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.4);
+      transition: transform 0.08s;
+      touch-action: manipulation;
+    }
+
+    .ctrl-btn:active {
+      transform: translateY(4px);
+    }
+
+    .ctrl-left, .ctrl-right {
+      background: linear-gradient(180deg, #475569, #334155);
+      border: 2px solid #94a3b8;
+    }
+
+    .ctrl-jump {
+      background: linear-gradient(180deg, #f59e0b, #d97706);
+      border: 2px solid #fde047;
+    }
+
+    .ctrl-action {
+      background: linear-gradient(180deg, #10b981, #059669);
+      border: 2px solid #6ee7b7;
+    }
+
+    /* 모달 (캐릭터 상점 & 도움말) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 2px solid #38bdf8;
+      border-radius: 24px;
+      max-width: 520px;
+      width: 100%;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 1.4rem;
+      color: var(--accent-yellow);
+    }
+
+    .skin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .skin-card {
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .skin-card.selected {
+      border-color: var(--accent-yellow);
+      background: rgba(250, 204, 21, 0.18);
+      box-shadow: 0 0 15px rgba(250, 204, 21, 0.35);
+    }
+
+    .skin-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 6px;
+    }
+
+    .skin-name {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .skin-price {
+      font-size: 0.85rem;
+      color: var(--accent-yellow);
+    }
+
+    @media (max-width: 640px) {
+      .brand-title { font-size: 1.15rem; }
+      .tab-btn { padding: 5px 8px; font-size: 0.82rem; }
+      .ctrl-btn { padding: 12px 4px; font-size: 1rem; }
+    }
+  </style>
 </head>
 <body>
-<div id="app">
 
-  <!-- 타이틀 -->
-  <section id="title" class="screen active">
-    <button class="icon-btn mute" id="btn-mute" aria-label="소리 켜기/끄기">🔊</button>
-    <div class="center-col">
-      <h1 class="logo">Word <span>Guardians</span></h1>
-      <div class="pet-card">
-        <div id="pet-emoji" class="pet">🥚</div>
-        <div class="pet-info">
-          <div class="row"><span id="pet-name"></span><span id="lv" class="chip"></span></div>
-          <div class="xpbar"><i id="xp-fill"></i></div>
-          <div class="meta">🪙 <span id="coins">0</span> · 연속 <span id="streak">0</span>일</div>
-        </div>
-      </div>
-      <input id="name-input" maxlength="10" placeholder="내 이름">
-      <button class="btn primary" id="btn-play">게임 시작</button>
-      <div class="menu-row">
-        <button class="btn" id="btn-dex">도감 · 오답노트</button>
-        <button class="btn" id="btn-temple">기억의 신전</button>
-        <button class="btn" id="btn-manage">단어장 관리</button>
-      </div>
+<div class="app-container">
+  <!-- 상단 상태바 및 사운드/상점 버튼 -->
+  <div class="top-bar">
+    <div class="brand-title">
+      <span>🎮 매스 블록 어드벤처</span>
     </div>
-  </section>
 
-  <!-- 스테이지 선택 -->
-  <section id="stages" class="screen">
-    <div class="head">
-      <button class="icon-btn" id="btn-stages-back" aria-label="뒤로">←</button>
-      <h2>스테이지</h2>
-      <div class="coin-pill">🪙 <span id="stage-coins">0</span></div>
+    <div class="stats-group">
+      <div class="stat-pill coin">💰 <span id="coinDisplay">100</span></div>
+      <div class="stat-pill combo">🔥 콤보 <span id="comboDisplay">0</span></div>
+      <div class="stat-pill">🏆 점수 <span id="scoreDisplay">0</span></div>
     </div>
-    <div class="tabs" id="grade-tabs"></div>
-    <div id="stage-grid"></div>
-  </section>
 
-  <!-- 인게임 -->
-  <section id="game" class="screen">
-    <div class="topbar">
-      <button class="icon-btn" id="btn-quit" aria-label="나가기">←</button>
-      <div class="progress"><i id="hud-fill"></i></div>
-      <div id="hearts" class="hearts"></div>
-    </div>
-    <div class="status"><span id="combo"></span></div>
-    <div id="stage-area"></div>
-    <div id="answer-area"></div>
-    <div id="feedback" class="feedback"></div>
-  </section>
-
-  <!-- 결과 -->
-  <section id="result" class="screen"><div id="result-body"></div></section>
-
-  <!-- 사전 학습 -->
-  <div class="modal" id="modal-pre">
-    <div class="sheet">
-      <h2 id="pre-title">미리보기</h2>
-      <div class="scroll"><div class="pre-list" id="pre-list"></div></div>
-      <div class="row-btns" style="margin:0">
-        <button class="btn sm" id="pre-replay">다시 듣기</button>
-        <button class="btn sm" id="pre-cancel">닫기</button>
-      </div>
-      <button class="btn primary" id="pre-go">출격!</button>
+    <div class="btn-group">
+      <button class="ui-btn shop-btn" id="openShopBtn">🛒 캐릭터 상점</button>
+      <button class="ui-btn" id="bgmToggleBtn">🎵 BGM OFF</button>
+      <button class="ui-btn active" id="sfxToggleBtn">🔊 효과음 ON</button>
+      <button class="ui-btn active" id="ttsToggleBtn">🗣️ 음성 ON</button>
     </div>
   </div>
 
-  <!-- 도감 & 오답노트 -->
-  <div class="modal" id="modal-col">
-    <div class="sheet">
-      <div class="tabs" id="col-tabs" style="margin:0"></div>
-      <div class="scroll" id="col-body"></div>
-      <button class="btn" id="col-close">닫기</button>
+  <!-- 학년(1~6학년) 및 게임 모드 선택 탭 -->
+  <div class="selector-bar">
+    <div class="grade-tabs" id="gradeTabs">
+      <button class="tab-btn" data-grade="1">1학년 (10만들기)</button>
+      <button class="tab-btn active" data-grade="2">★2학년 (구구단·두자리)</button>
+      <button class="tab-btn" data-grade="3">3학년 (나눗셈·분수)</button>
+      <button class="tab-btn" data-grade="4">4학년 (소수·분수연산)</button>
+      <button class="tab-btn" data-grade="5">5학년 (약수·배수)</button>
+      <button class="tab-btn" data-grade="6">6학년 (비율·백분율)</button>
+    </div>
+
+    <div class="mode-tabs" id="modeTabs">
+      <button class="tab-btn active" data-mode="mario">🏃 마리오 점프</button>
+      <button class="tab-btn" data-mode="builder">➕ 수 모으기 연타</button>
+      <button class="tab-btn" data-mode="tetris">🧱 테트리스 드롭</button>
+      <button class="tab-btn" data-mode="revenge">🔥 오답 복습(<span id="wrongCount">0</span>)</button>
     </div>
   </div>
 
-  <!-- 단어장 관리 -->
-  <div class="modal" id="modal-manage">
-    <div class="sheet">
-      <h2>단어장 관리</h2>
-      <div class="scroll">
-        <form id="add-form" autocomplete="off">
-          <input id="f-en" placeholder="영어 (예: umbrella)" required>
-          <input id="f-ko" placeholder="한글 뜻 (예: 우산)" required>
-          <input id="f-emoji" placeholder="이모지 (예: ☂️)" maxlength="8">
-          <select id="f-grade">
-            <option value="1">1학년</option><option value="2" selected>2학년</option><option value="3">3학년</option>
-            <option value="4">4학년</option><option value="5">5학년</option><option value="6">6학년</option>
-          </select>
-          <input id="f-sent" class="full" placeholder="예문 (선택)">
-          <button class="btn primary sm full" type="submit">단어 추가</button>
-        </form>
-        <div class="sec">추가한 단어 <span id="custom-count"></span></div>
-        <div id="custom-list"></div>
-        <textarea id="json-box" placeholder="내보내기 결과가 여기에 표시돼요. 불러올 JSON을 붙여넣어도 돼요."></textarea>
-        <div class="row-btns">
-          <button class="btn sm" id="btn-export">내보내기</button>
-          <button class="btn sm" id="btn-import-file">파일 불러오기</button>
-          <button class="btn sm" id="btn-import-text">붙여넣기 불러오기</button>
-          <input type="file" id="file-import" accept=".json,application/json" hidden>
-        </div>
-      </div>
-      <button class="btn" id="manage-close">닫기</button>
-    </div>
+  <!-- 메인 게임 캔버스 -->
+  <div class="canvas-wrapper">
+    <canvas id="gameCanvas" width="900" height="560"></canvas>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <!-- 하단 터치 & 마우스 컨트롤 패드 -->
+  <div class="controls-bar">
+    <button class="ctrl-btn ctrl-left" id="btnLeft">◀ 왼쪽 이동</button>
+    <button class="ctrl-btn ctrl-right" id="btnRight">오른쪽 이동 ▶</button>
+    <button class="ctrl-btn ctrl-jump" id="btnJump">▲ 점프 / 블록변환</button>
+    <button class="ctrl-btn ctrl-action" id="btnAction">⚡ 빠른낙하 / 새문제</button>
+  </div>
 </div>
 
-<script src="words.js"></script>
-<script src="app.js"></script>
+<!-- 캐릭터 상점 모달 -->
+<div class="modal-overlay" id="shopModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span>🛒 캐릭터 스킨 상점</span>
+      <button class="ui-btn" id="closeShopBtn">✖ 닫기</button>
+    </div>
+    <p style="margin-bottom: 12px; color: #cbd5e1; font-size: 0.95rem;">
+      수학 문제를 풀고 모은 코인으로 나만의 캐릭터를 꾸며보세요!
+    </p>
+    <div class="skin-grid" id="skinGrid"></div>
+  </div>
+</div>
+
+<script>
+/**
+ * ============================================================================
+ * 1. 사운드 및 음성 합성 엔진 (Web Audio API & Web Speech API)
+ * ============================================================================
+ */
+class SoundEngine {
+  constructor() {
+    this.ctx = null;
+    this.bgmEnabled = false;
+    this.sfxEnabled = true;
+    this.ttsEnabled = true;
+    this.bgmTimer = null;
+    this.bgmStep = 0;
+  }
+
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+
+  playTone(freq, type = 'square', duration = 0.12, vol = 0.12, slideFreq = null) {
+    if (!this.sfxEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+    if (slideFreq) {
+      osc.frequency.exponentialRampToValueAtTime(slideFreq, now + duration);
+    }
+
+    gain.gain.setValueAtTime(vol, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  playJump() {
+    this.playTone(280, 'sine', 0.16, 0.14, 620);
+  }
+
+  playBrickHit() {
+    this.playTone(520, 'triangle', 0.09, 0.18, 880);
+  }
+
+  playCorrect() {
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+    notes.forEach((n, idx) => {
+      setTimeout(() => this.playTone(n, 'triangle', 0.14, 0.16), idx * 75);
+    });
+  }
+
+  playHint() {
+    this.playTone(300, 'sine', 0.15, 0.12, 220);
+  }
+
+  playExplosion() {
+    this.playTone(180, 'sawtooth', 0.22, 0.18, 55);
+    setTimeout(() => this.playTone(740, 'triangle', 0.15, 0.15, 1100), 60);
+  }
+
+  speak(text) {
+    if (!this.ttsEnabled || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ko-KR';
+      utter.rate = 1.1;
+      utter.pitch = 1.15;
+      window.speechSynthesis.speak(utter);
+    } catch (e) {}
+  }
+
+  toggleBGM() {
+    this.bgmEnabled = !this.bgmEnabled;
+    if (this.bgmEnabled) {
+      this.init();
+      this.startBGM();
+    } else {
+      this.stopBGM();
+    }
+    return this.bgmEnabled;
+  }
+
+  startBGM() {
+    this.stopBGM();
+    // 밝고 경쾌한 아케이드 멜로디 루프
+    const melody = [
+      523.25, 659.25, 783.99, 659.25,
+      587.33, 698.46, 880.00, 698.46,
+      523.25, 659.25, 783.99, 1046.50,
+      987.77, 783.99, 659.25, 587.33
+    ];
+    this.bgmStep = 0;
+    this.bgmTimer = setInterval(() => {
+      if (!this.bgmEnabled || !this.ctx) return;
+      const freq = melody[this.bgmStep % melody.length];
+      this.bgmStep++;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.035, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.18);
+    }, 220);
+  }
+
+  stopBGM() {
+    if (this.bgmTimer) {
+      clearInterval(this.bgmTimer);
+      this.bgmTimer = null;
+    }
+  }
+}
+
+const sound = new SoundEngine();
+
+/**
+ * ============================================================================
+ * 2. 로컬 스토리지 및 캐릭터 스킨 데이터
+ * ============================================================================
+ */
+const SKINS = [
+  { id: 'fairy', emoji: '🧚', name: '수학 요정', price: 0 },
+  { id: 'astro', emoji: '🧑‍🚀', name: '우주 탐험가', price: 50 },
+  { id: 'dino',  emoji: '🦖', name: '아기 공룡', price: 100 },
+  { id: 'cat',   emoji: '🐱', name: '고양이 기사', price: 150 },
+  { id: 'wiz',   emoji: '🧙‍♂️', name: '대마법사', price: 200 },
+  { id: 'uni',   emoji: '🦄', name: '무지개 유니콘', price: 300 }
+];
+
+const GameData = {
+  coins: 100,
+  score: 0,
+  combo: 0,
+  grade: 2,
+  mode: 'mario', // 'mario' | 'builder' | 'tetris' | 'revenge'
+  currentSkin: '🧚',
+  ownedSkins: ['fairy'],
+  wrongNotes: [],
+
+  load() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('math_block_adv_v1'));
+      if (saved) {
+        this.coins = saved.coins ?? 100;
+        this.score = saved.score ?? 0;
+        this.currentSkin = saved.currentSkin ?? '🧚';
+        this.ownedSkins = saved.ownedSkins ?? ['fairy'];
+        this.wrongNotes = saved.wrongNotes ?? [];
+      }
+    } catch (e) {}
+    this.updateHUD();
+  },
+
+  save() {
+    try {
+      localStorage.setItem('math_block_adv_v1', JSON.stringify({
+        coins: this.coins,
+        score: this.score,
+        currentSkin: this.currentSkin,
+        ownedSkins: this.ownedSkins,
+        wrongNotes: this.wrongNotes.slice(-25)
+      }));
+    } catch (e) {}
+    this.updateHUD();
+  },
+
+  addWrongNote(qObj) {
+    if (!this.wrongNotes.some(item => item.questionText === qObj.questionText)) {
+      this.wrongNotes.push(qObj);
+      this.save();
+    }
+  },
+
+  updateHUD() {
+    document.getElementById('coinDisplay').textContent = this.coins;
+    document.getElementById('comboDisplay').textContent = this.combo;
+    document.getElementById('scoreDisplay').textContent = this.score;
+    document.getElementById('wrongCount').textContent = this.wrongNotes.length;
+  }
+};
+
+/**
+ * ============================================================================
+ * 3. 초등 1~6학년 수학 문제 및 시각적 교구 데이터 생성기
+ * ============================================================================
+ */
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateMathProblem(grade, mode) {
+  // 오답 복습 모드일 때 저장된 오답 우선 출제
+  if (mode === 'revenge' && GameData.wrongNotes.length > 0) {
+    const saved = GameData.wrongNotes[randInt(0, GameData.wrongNotes.length - 1)];
+    return JSON.parse(JSON.stringify(saved));
+  }
+
+  let q = {
+    grade,
+    questionText: '',
+    speechText: '',
+    answer: 0,
+    displayAnswer: '',
+    options: [],
+    visualType: '', // 'tenframe' | 'dotarray' | 'tensblocks' | 'pizza' | 'decimalbar' | 'factorgrid' | 'percentbar'
+    visualData: {},
+    targetNumber: 10 // builder & tetris용
+  };
+
+  if (grade === 1) {
+    // 1학년: 10 만들기 & 기초 덧뺄셈
+    const type = Math.random() < 0.5 ? 'make10' : 'addsub';
+    if (type === 'make10') {
+      const a = randInt(1, 9);
+      const ans = 10 - a;
+      q.questionText = `10 만들기!  ${a} + [ ? ] = 10`;
+      q.speechText = `${a} 더하기 ${ans}은 10! 십 만들기 성공!`;
+      q.answer = ans;
+      q.visualType = 'tenframe';
+      q.visualData = { filled: a, total: 10 };
+      q.targetNumber = 10;
+    } else {
+      const a = randInt(3, 9);
+      const b = randInt(2, 8);
+      const ans = a + b;
+      q.questionText = `${a} + ${b} = [ ? ]`;
+      q.speechText = `${a} 더하기 ${b}은 ${ans}! 정답!`;
+      q.answer = ans;
+      q.visualType = 'tenframe';
+      q.visualData = { filled: a, added: b, total: 20 };
+      q.targetNumber = ans;
+    }
+  } else if (grade === 2) {
+    // 2학년 (핵심 타겟): 구구단(2~9단) & 두 자리 수 덧뺄셈
+    const isGugudan = Math.random() < 0.65;
+    if (isGugudan) {
+      const dan = randInt(2, 9);
+      const mul = randInt(2, 9);
+      const ans = dan * mul;
+      const blankMode = Math.random() < 0.35;
+      if (blankMode) {
+        q.questionText = `구구단 ${dan}단!  ${dan} × [ ? ] = ${ans}`;
+        q.answer = mul;
+      } else {
+        q.questionText = `구구단 ${dan}단!  ${dan} × ${mul} = [ ? ]`;
+        q.answer = ans;
+      }
+      q.speechText = `${dan} 곱하기 ${mul}은 ${ans}! 최고예요!`;
+      q.visualType = 'dotarray';
+      q.visualData = { rows: dan, cols: mul };
+      q.targetNumber = ans;
+    } else {
+      const a = randInt(14, 48);
+      const b = randInt(12, 39);
+      const ans = a + b;
+      q.questionText = `두 자리 덧셈!  ${a} + ${b} = [ ? ]`;
+      q.speechText = `${a} 더하기 ${b}은 ${ans}! 참 잘했어요!`;
+      q.answer = ans;
+      q.visualType = 'tensblocks';
+      q.visualData = { a, b, tens: Math.floor(ans / 10), ones: ans % 10 };
+      q.targetNumber = ans;
+    }
+  } else if (grade === 3) {
+    // 3학년: 기초 나눗셈 & 분수(피자 조각)
+    const isFraction = Math.random() < 0.5;
+    if (isFraction) {
+      const denom = [4, 6, 8][randInt(0, 2)];
+      const n1 = randInt(1, denom - 2);
+      const n2 = randInt(1, denom - n1);
+      const ans = n1 + n2;
+      q.questionText = `분수 합치기!  ${n1}/${denom} + ${n2}/${denom} = [ ? ]/${denom}`;
+      q.speechText = `${denom}분의 ${n1} 더하기 ${denom}분의 ${n2}는 ${denom}분의 ${ans}!`;
+      q.answer = ans;
+      q.visualType = 'pizza';
+      q.visualData = { denom, n1, n2 };
+      q.targetNumber = denom;
+    } else {
+      const divisor = randInt(2, 9);
+      const quotient = randInt(2, 9);
+      const dividend = divisor * quotient;
+      q.questionText = `나눗셈!  ${dividend} ÷ ${divisor} = [ ? ]`;
+      q.speechText = `${dividend} 나누기 ${divisor}는 ${quotient}! 정답!`;
+      q.answer = quotient;
+      q.visualType = 'dotarray';
+      q.visualData = { rows: divisor, cols: quotient };
+      q.targetNumber = dividend;
+    }
+  } else if (grade === 4) {
+    // 4학년: 소수의 덧셈 (0.1 단위)
+    const a = randInt(1, 7);
+    const b = randInt(1, 10 - a);
+    const ans = a + b; // 0.a + 0.b = (a+b)/10
+    q.questionText = `소수 덧셈!  0.${a} + 0.${b} = 0.[ ? ] (1.0이면 10)`;
+    if (ans === 10) {
+      q.questionText = `소수 완성!  0.${a} + 0.${b} = [ ? ] (자연수)`;
+      q.answer = 1;
+      q.speechText = `영점 ${a} 더하기 영점 ${b}는 일!`;
+    } else {
+      q.questionText = `소수 덧셈!  0.${a} + 0.${b} = 0.[ ? ]`;
+      q.answer = ans;
+      q.speechText = `영점 ${a} 더하기 영점 ${b}는 영점 ${ans}!`;
+    }
+    q.visualType = 'decimalbar';
+    q.visualData = { a, b, total: 10 };
+    q.targetNumber = 10;
+  } else if (grade === 5) {
+    // 5학년: 약수와 배수 & 혼합 계산
+    const compositeList = [12, 16, 18, 20, 24, 30, 36];
+    const num = compositeList[randInt(0, compositeList.length - 1)];
+    const factors = [];
+    for (let i = 2; i < num; i++) {
+      if (num % i === 0) factors.push(i);
+    }
+    const ans = factors[randInt(0, factors.length - 1)];
+    const other = num / ans;
+    q.questionText = `약수 찾기!  ${num} = ${other} × [ ? ] (${num}의 약수)`;
+    q.speechText = `${num}의 약수 ${ans} 찾기 성공!`;
+    q.answer = ans;
+    q.visualType = 'factorgrid';
+    q.visualData = { num, r: other, c: ans };
+    q.targetNumber = num;
+  } else {
+    // 6학년: 분수·소수·백분율(%) 변환
+    const ratios = [
+      { frac: '1/2', dec: '0.5', pct: 50 },
+      { frac: '1/4', dec: '0.25', pct: 25 },
+      { frac: '3/4', dec: '0.75', pct: 75 },
+      { frac: '1/5', dec: '0.2', pct: 20 },
+      { frac: '2/5', dec: '0.4', pct: 40 },
+      { frac: '3/5', dec: '0.6', pct: 60 },
+      { frac: '4/5', dec: '0.8', pct: 80 },
+      { frac: '1/10', dec: '0.1', pct: 10 }
+    ];
+    const pick = ratios[randInt(0, ratios.length - 1)];
+    q.questionText = `비율과 백분율!  분수 ${pick.frac} (소수 ${pick.dec}) = [ ? ]%`;
+    q.speechText = `${pick.frac}은 백분율로 ${pick.pct} 퍼센트!`;
+    q.answer = pick.pct;
+    q.visualType = 'percentbar';
+    q.visualData = pick;
+    q.targetNumber = 100;
+  }
+
+  // 보기 4개 생성 (정답 포함 + 그럴듯한 오답 3개)
+  const opts = new Set([q.answer]);
+  while (opts.size < 4) {
+    let diff = randInt(-6, 6);
+    if (diff === 0) diff = 2;
+    let cand = q.answer + diff;
+    if (cand <= 0) cand = q.answer + randInt(1, 7);
+    opts.add(cand);
+  }
+  q.options = Array.from(opts).sort((a, b) => a - b);
+  return q;
+}
+
+/**
+ * ============================================================================
+ * 4. 메인 게임 엔진 (마리오 점프 / 수 모으기 / 테트리스 드롭 통합)
+ * ============================================================================
+ */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const keys = { left: false, right: false };
+
+const Game = {
+  problem: null,
+  particles: [],
+  floatingTexts: [],
+  hintData: null, // { chosen: 12, answer: 16, timer: 180 }
+  feverTimer: 0,
+
+  // 마리오 & 빌더 모드 엔티티
+  player: {
+    x: 420,
+    y: 430,
+    vx: 0,
+    vy: 0,
+    w: 54,
+    h: 54,
+    onGround: true
+  },
+  bricks: [],
+  slime: { x: 150, y: 452, vx: 2.2, w: 44, h: 34 },
+  builderSum: 0,
+
+  // 테트리스 모드 엔티티
+  tetris: {
+    cols: 6,
+    rows: 8,
+    grid: [],
+    activeBlock: null,
+    dropCounter: 0,
+    dropInterval: 55,
+    targetSum: 10,
+    bossHP: 100,
+    bossMaxHP: 100
+  },
+
+  init() {
+    GameData.load();
+    this.setupNewRound();
+    this.loop();
+  },
+
+  setupNewRound() {
+    this.problem = generateMathProblem(GameData.grade, GameData.mode);
+    this.hintData = null;
+
+    if (GameData.mode === 'mario' || GameData.mode === 'revenge') {
+      this.setupMarioBricks();
+    } else if (GameData.mode === 'builder') {
+      this.setupBuilderBricks();
+    } else if (GameData.mode === 'tetris') {
+      this.setupTetris();
+    }
+  },
+
+  setupMarioBricks() {
+    const opts = this.problem.options;
+    const spacing = 175;
+    const startX = 160;
+    this.bricks = opts.map((val, idx) => ({
+      x: startX + idx * spacing,
+      y: 265,
+      w: 92,
+      h: 64,
+      value: val,
+      label: `${val}`,
+      bounceY: 0,
+      color: '#f59e0b'
+    }));
+  },
+
+  setupBuilderBricks() {
+    this.builderSum = 0;
+    const target = this.problem.targetNumber || 24;
+    this.problem.questionText = `🎯 수 모으기! 벽돌을 점프로 쳐서 [ ${target} ] 을 완성하세요!`;
+    this.problem.answer = target;
+
+    // 학년별 맞춤 단위 벽돌 배치
+    let units = [10, 5, 1, -1];
+    if (GameData.grade === 1) units = [5, 2, 1, -1];
+    if (GameData.grade === 2 && this.problem.visualType === 'dotarray') {
+      const rowUnit = this.problem.visualData.rows || 6;
+      units = [rowUnit, 10, 1, -1];
+    }
+
+    const startX = 145;
+    const spacing = 175;
+    this.bricks = units.map((u, idx) => ({
+      x: startX + idx * spacing,
+      y: 265,
+      w: 96,
+      h: 64,
+      value: u,
+      label: u > 0 ? `+${u}` : `${u}`,
+      bounceY: 0,
+      color: u > 0 ? '#10b981' : '#f43f5e'
+    }));
+  },
+
+  setupTetris() {
+    const t = this.tetris;
+    t.grid = Array.from({ length: t.rows }, () => Array(t.cols).fill(null));
+    t.bossMaxHP = 100;
+    t.bossHP = 100;
+    t.targetSum = GameData.grade === 1 ? 10 : (GameData.grade === 2 ? 15 : 20);
+    // 바닥에 초기 블록 2줄 깔기
+    for (let r = t.rows - 2; r < t.rows; r++) {
+      for (let c = 0; c < t.cols; c++) {
+        if (Math.random() < 0.65) {
+          t.grid[r][c] = randInt(1, t.targetSum - 2);
+        }
+      }
+    }
+    this.spawnTetrisBlock();
+  },
+
+  spawnTetrisBlock() {
+    const t = this.tetris;
+    // 바닥 블록과 합쳐서 targetSum을 만들 수 있는 유도 숫자를 65% 확률로 생성
+    const candidates = [];
+    for (let c = 0; c < t.cols; c++) {
+      for (let r = 0; r < t.rows; r++) {
+        if (t.grid[r][c] !== null) {
+          const need = t.targetSum - t.grid[r][c];
+          if (need >= 1 && need < t.targetSum) candidates.push(need);
+          break;
+        }
+      }
+    }
+    let val = randInt(1, t.targetSum - 1);
+    if (candidates.length > 0 && Math.random() < 0.7) {
+      val = candidates[randInt(0, candidates.length - 1)];
+    }
+
+    t.activeBlock = {
+      c: Math.floor(t.cols / 2),
+      r: 0,
+      val
+    };
+
+    // 천장에 닿으면 바닥 3줄 정리해주기 (아이들 스트레스 방지)
+    if (t.grid[0][t.activeBlock.c] !== null) {
+      t.grid.splice(0, 3);
+      while (t.grid.length < t.rows) {
+        t.grid.unshift(Array(t.cols).fill(null));
+      }
+      this.addFloatingText(450, 260, '🛡️ 방어막 발동! 블록 정리!', '#38bdf8');
+    }
+  },
+
+  triggerJumpOrTransform() {
+    if (GameData.mode === 'tetris') {
+      // 테트리스 모드: 현재 블록 숫자 +1 변환
+      const b = this.tetris.activeBlock;
+      if (b) {
+        b.val = (b.val % (this.tetris.targetSum - 1)) + 1;
+        sound.playBrickHit();
+      }
+    } else {
+      // 마리오 & 빌더 모드: 점프
+      if (this.player.onGround) {
+        this.player.vy = -15.5;
+        this.player.onGround = false;
+        sound.playJump();
+      }
+    }
+  },
+
+  triggerAction() {
+    if (GameData.mode === 'tetris') {
+      // 하드 드롭
+      while (this.stepTetrisDown()) {}
+    } else {
+      // 새 문제 교체
+      sound.playBrickHit();
+      this.setupNewRound();
+    }
+  },
+
+  moveTetrisHorizontal(dir) {
+    const t = this.tetris;
+    if (!t.activeBlock) return;
+    const nc = t.activeBlock.c + dir;
+    if (nc >= 0 && nc < t.cols && t.grid[t.activeBlock.r][nc] === null) {
+      t.activeBlock.c = nc;
+      sound.playTone(400, 'sine', 0.04, 0.08);
+    }
+  },
+
+  stepTetrisDown() {
+    const t = this.tetris;
+    const b = t.activeBlock;
+    if (!b) return false;
+
+    if (b.r + 1 < t.rows && t.grid[b.r + 1][b.c] === null) {
+      b.r++;
+      return true;
+    } else {
+      // 착지 및 인접 블록 합 계산
+      t.grid[b.r][b.c] = b.val;
+      this.checkTetrisMatch(b.r, b.c);
+      this.spawnTetrisBlock();
+      return false;
+    }
+  },
+
+  checkTetrisMatch(r, c) {
+    const t = this.tetris;
+    const myVal = t.grid[r][c];
+    if (myVal === null) return;
+
+    const dirs = [[1, 0], [0, -1], [0, 1], [-1, 0]];
+    let matched = false;
+
+    for (const [dr, dc] of dirs) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (nr >= 0 && nr < t.rows && nc >= 0 && nc < t.cols) {
+        const neighbor = t.grid[nr][nc];
+        if (neighbor !== null && myVal + neighbor === t.targetSum) {
+          // 합체 폭발!
+          t.grid[r][c] = null;
+          t.grid[nr][nc] = null;
+          matched = true;
+          sound.playExplosion();
+          sound.speak(`${myVal} 더하기 ${neighbor}은 ${t.targetSum}! 폭발!`);
+          this.spawnParticles(450, 300, '#facc15', 30);
+          this.addFloatingText(450, 230, `💥 ${myVal} + ${neighbor} = ${t.targetSum} 완성! 보스 타격!`, '#facc15');
+
+          GameData.coins += 10;
+          GameData.score += 50;
+          GameData.combo++;
+          t.bossHP = Math.max(0, t.bossHP - 25);
+
+          if (t.bossHP === 0) {
+            sound.playCorrect();
+            this.addFloatingText(450, 180, '🎉 보스 격파! 보너스 +50 코인!', '#22c55e');
+            GameData.coins += 50;
+            t.bossHP = t.bossMaxHP;
+          }
+          GameData.save();
+          break;
+        }
+      }
+    }
+
+    // 중력 낙하 정렬
+    if (matched) {
+      for (let col = 0; col < t.cols; col++) {
+        const stack = [];
+        for (let row = t.rows - 1; row >= 0; row--) {
+          if (t.grid[row][col] !== null) stack.push(t.grid[row][col]);
+        }
+        for (let row = t.rows - 1; row >= 0; row--) {
+          t.grid[row][col] = stack[t.rows - 1 - row] ?? null;
+        }
+      }
+    }
+  },
+
+  update() {
+    if (this.feverTimer > 0) this.feverTimer--;
+    if (this.hintData) {
+      this.hintData.timer--;
+      if (this.hintData.timer <= 0) this.hintData = null;
+    }
+
+    // 파티클 & 플로팅 텍스트 업데이트
+    this.particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.25;
+      p.life--;
+    });
+    this.particles = this.particles.filter(p => p.life > 0);
+
+    this.floatingTexts.forEach(ft => {
+      ft.y -= 1.2;
+      ft.life--;
+    });
+    this.floatingTexts = this.floatingTexts.filter(ft => ft.life > 0);
+
+    if (GameData.mode === 'tetris') {
+      this.tetris.dropCounter++;
+      if (this.tetris.dropCounter >= this.tetris.dropInterval) {
+        this.tetris.dropCounter = 0;
+        this.stepTetrisDown();
+      }
+      return;
+    }
+
+    // 마리오 & 빌더 물리 업데이트
+    const p = this.player;
+    const speed = this.feverTimer > 0 ? 7.5 : 5.8;
+    if (keys.left) p.vx = -speed;
+    else if (keys.right) p.vx = speed;
+    else p.vx *= 0.78;
+
+    p.x += p.vx;
+    p.vy += 0.72; // 중력
+    p.y += p.vy;
+
+    // 좌우 벽 제한
+    if (p.x < 30) p.x = 30;
+    if (p.x > canvas.width - p.w - 30) p.x = canvas.width - p.w - 30;
+
+    // 바닥 착지
+    const groundY = 432;
+    if (p.y >= groundY) {
+      p.y = groundY;
+      p.vy = 0;
+      p.onGround = true;
+    }
+
+    // 피버 무지개 잔상 파티클
+    if (this.feverTimer > 0 && Math.random() < 0.5) {
+      this.particles.push({
+        x: p.x + p.w / 2,
+        y: p.y + p.h / 2,
+        vx: randInt(-2, 2),
+        vy: randInt(-2, 1),
+        color: '#facc15',
+        size: 5,
+        life: 18
+      });
+    }
+
+    // 벽돌 바운스 복원 및 머리 타격 충돌 판정
+    this.bricks.forEach(b => {
+      if (b.bounceY < 0) b.bounceY += 1.5;
+      if (b.bounceY > 0) b.bounceY = 0;
+
+      // 점프 상승 중 벽돌 하단 타격
+      if (
+        p.vy < 0 &&
+        p.x + p.w * 0.75 > b.x &&
+        p.x + p.w * 0.25 < b.x + b.w &&
+        p.y <= b.y + b.h &&
+        p.y >= b.y + b.h - 24
+      ) {
+        p.vy = 4; // 아래로 튕김
+        b.bounceY = -14;
+        this.onBrickHit(b);
+      }
+    });
+
+    // 황금 보너스 슬라임 이동 및 밟기
+    const s = this.slime;
+    s.x += s.vx;
+    if (s.x < 60 || s.x > canvas.width - 100) s.vx *= -1;
+
+    if (
+      p.vy > 0 &&
+      p.x + p.w > s.x &&
+      p.x < s.x + s.w &&
+      p.y + p.h >= s.y &&
+      p.y + p.h <= s.y + 28
+    ) {
+      p.vy = -13;
+      sound.playBrickHit();
+      GameData.coins += 3;
+      GameData.save();
+      this.spawnParticles(s.x + s.w / 2, s.y, '#38bdf8', 12);
+      this.addFloatingText(s.x, s.y - 10, '💧 슬라임 점프! +3 코인', '#38bdf8');
+    }
+  },
+
+  onBrickHit(brick) {
+    sound.playBrickHit();
+
+    if (GameData.mode === 'builder') {
+      this.builderSum = Math.max(0, this.builderSum + brick.value);
+      this.spawnParticles(brick.x + brick.w / 2, brick.y, brick.color, 12);
+      this.addFloatingText(brick.x + 20, brick.y - 10, `현재 합: ${this.builderSum}`, '#f8fafc');
+
+      if (this.builderSum === this.problem.answer) {
+        this.handleCorrectAnswer();
+      } else if (this.builderSum > this.problem.answer) {
+        sound.playHint();
+        this.hintData = { chosen: this.builderSum, answer: this.problem.answer, timer: 180 };
+      }
+      return;
+    }
+
+    // 마리오 정답 타격 모드
+    if (brick.value === this.problem.answer) {
+      // 오답 복습 모드였다면 오답 노트에서 제거
+      if (GameData.mode === 'revenge') {
+        GameData.wrongNotes = GameData.wrongNotes.filter(
+          item => item.questionText !== this.problem.questionText
+        );
+      }
+      this.handleCorrectAnswer();
+    } else {
+      // 오답 시 목숨 감소 없이 수직선 어림셈 힌트 표시 & 오답 노트 기록
+      sound.playHint();
+      GameData.combo = 0;
+      GameData.addWrongNote(this.problem);
+      this.hintData = {
+        chosen: brick.value,
+        answer: this.problem.answer,
+        timer: 220
+      };
+      const msg = brick.value < this.problem.answer
+        ? `${brick.value}보다 더 큰 수예요! 오른쪽을 보세요 ▶`
+        : `${brick.value}보다 더 작은 수예요! ◀ 왼쪽을 보세요`;
+      this.addFloatingText(brick.x, brick.y - 15, msg, '#fb7185');
+    }
+  },
+
+  handleCorrectAnswer() {
+    sound.playCorrect();
+    if (this.problem.speechText) sound.speak(this.problem.speechText);
+
+    GameData.combo++;
+    const isFever = GameData.combo >= 3;
+    if (isFever) this.feverTimer = 300;
+
+    const reward = isFever ? 20 : 10;
+    GameData.coins += reward;
+    GameData.score += isFever ? 40 : 20;
+    GameData.save();
+
+    this.spawnParticles(450, 250, '#facc15', 35);
+    this.addFloatingText(
+      450,
+      210,
+      isFever ? `🌟 슈퍼 피버 정답! +${reward} 코인!` : `⭕ 정답입니다! +${reward} 코인!`,
+      '#facc15'
+    );
+
+    setTimeout(() => this.setupNewRound(), 650);
+  },
+
+  spawnParticles(x, y, color, count = 20) {
+    for (let i = 0; i < count; i++) {
+      this.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 10,
+        vy: (Math.random() - 0.8) * 9,
+        color,
+        size: randInt(4, 8),
+        life: randInt(25, 45)
+      });
+    }
+  },
+
+  addFloatingText(x, y, text, color = '#ffffff') {
+    this.floatingTexts.push({ x, y, text, color, life: 65 });
+  },
+
+  /**
+   * ==========================================================================
+   * 5. 시각적 수학 교구 및 화면 렌더링
+   * ==========================================================================
+   */
+  draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 배경 하늘 & 구름 그리기
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#0f172a');
+    grad.addColorStop(0.65, '#1e3a8a');
+    grad.addColorStop(1, '#1d4ed8');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 상단 문제 & 시각적 수학 교구 보드 렌더링
+    this.drawMathVisualBoard();
+
+    if (GameData.mode === 'tetris') {
+      this.drawTetrisMode();
+    } else {
+      this.drawMarioMode();
+    }
+
+    // 수직선 어림셈 힌트 바 렌더링
+    if (this.hintData) {
+      this.drawNumberLineHint();
+    }
+
+    // 파티클 & 플로팅 텍스트
+    this.particles.forEach(p => {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    this.floatingTexts.forEach(ft => {
+      ctx.save();
+      ctx.font = '22px Jua';
+      ctx.fillStyle = ft.color;
+      ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(ft.text, ft.x, ft.y);
+      ctx.restore();
+    });
+  },
+
+  drawMathVisualBoard() {
+    if (!this.problem) return;
+
+    // 상단 질문 카드
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.78)';
+    ctx.strokeStyle = 'rgba(125, 211, 252, 0.5)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.roundRect(24, 14, 852, 142, 18);
+    ctx.fill();
+    ctx.stroke();
+
+    // 질문 텍스트
+    ctx.fillStyle = '#facc15';
+    ctx.font = '28px Jua';
+    ctx.textAlign = 'left';
+    let title = this.problem.questionText;
+    if (GameData.mode === 'builder') {
+      title += `   (현재 합계: ${this.builderSum})`;
+    } else if (GameData.mode === 'tetris') {
+      title = `🧱 테트리스 합체 미션: 인접한 두 블록의 합을 [ ${this.tetris.targetSum} ] 으로 만드세요!`;
+    }
+    ctx.fillText(title, 46, 54);
+
+    // 학년별 시각적 수학 교구(Visual Math Aid) 그리기
+    const vType = this.problem.visualType;
+    const vData = this.problem.visualData;
+
+    if (GameData.mode === 'tetris') {
+      // 테트리스 보스 HP 바 표시
+      const t = this.tetris;
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '18px Jua';
+      ctx.fillText(`👾 수학 골렘 보스 HP: ${t.bossHP} / ${t.bossMaxHP}`, 46, 95);
+
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.roundRect(46, 108, 420, 24, 12);
+      ctx.fill();
+
+      ctx.fillStyle = '#f43f5e';
+      ctx.beginPath();
+      ctx.roundRect(46, 108, Math.max(12, (t.bossHP / t.bossMaxHP) * 420), 24, 12);
+      ctx.fill();
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('💡 팁: [▲ 점프/블록변환] 버튼을 누르면 떨어지는 블록의 숫자가 +1씩 바뀝니다!', 485, 126);
+      ctx.restore();
+      return;
+    }
+
+    if (vType === 'tenframe') {
+      // 1학년: 10칸 구슬 상자
+      const startX = 46;
+      const startY = 74;
+      const cellW = 34;
+      for (let i = 0; i < 10; i++) {
+        ctx.strokeStyle = '#94a3b8';
+        ctx.strokeRect(startX + i * cellW, startY, cellW - 4, 34);
+        if (i < vData.filled) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath();
+          ctx.arc(startX + i * cellW + 15, startY + 17, 11, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (vData.added && i < vData.filled + vData.added) {
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.arc(startX + i * cellW + 15, startY + 17, 11, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '17px Jua';
+      ctx.fillText('👈 10칸 구슬 상자를 보고 빈칸이나 합계를 어림해 보세요!', startX + 365, startY + 24);
+    } else if (vType === 'dotarray') {
+      // 2~3학년: 구구단 묶음 점 배열 시각화
+      const rows = Math.min(vData.rows || 3, 9);
+      const cols = Math.min(vData.cols || 4, 9);
+      const startX = 48;
+      const startY = 72;
+      for (let g = 0; g < rows; g++) {
+        const gx = startX + g * 58;
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.16)';
+        ctx.beginPath();
+        ctx.roundRect(gx, startY, 50, 66, 8);
+        ctx.fill();
+        for (let c = 0; c < cols; c++) {
+          const dx = gx + 11 + (c % 3) * 14;
+          const dy = startY + 13 + Math.floor(c / 3) * 18;
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.arc(dx, dy, 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.fillStyle = '#7dd3fc';
+      ctx.font = '17px Jua';
+      ctx.fillText(`(${cols}개씩 ${rows}묶음 시각 모형)`, startX + rows * 58 + 10, startY + 40);
+    } else if (vType === 'tensblocks') {
+      // 2학년: 십 모형 막대와 일 모형 낱개
+      const startX = 48;
+      const startY = 76;
+      const tens = Math.min(vData.tens || 3, 9);
+      const ones = vData.ones || 4;
+      for (let i = 0; i < tens; i++) {
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(startX + i * 24, startY, 16, 56);
+        ctx.strokeStyle = '#0f172a';
+        ctx.strokeRect(startX + i * 24, startY, 16, 56);
+      }
+      const onesX = startX + tens * 24 + 16;
+      for (let j = 0; j < ones; j++) {
+        ctx.fillStyle = '#facc15';
+        ctx.fillRect(onesX + j * 18, startY + 38, 14, 14);
+      }
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '17px Jua';
+      ctx.fillText(`👈 파란 십(10) 모형 막대와 노란 일(1) 모형 낱개`, onesX + ones * 18 + 16, startY + 36);
+    } else if (vType === 'pizza') {
+      // 3학년: 원형 피자 분수 조각
+      const cx = 90;
+      const cy = 108;
+      const r = 34;
+      const denom = vData.denom || 4;
+      for (let i = 0; i < denom; i++) {
+        const a1 = (i / denom) * Math.PI * 2 - Math.PI / 2;
+        const a2 = ((i + 1) / denom) * Math.PI * 2 - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, a1, a2);
+        ctx.closePath();
+        if (i < vData.n1) ctx.fillStyle = '#f59e0b';
+        else if (i < vData.n1 + vData.n2) ctx.fillStyle = '#22c55e';
+        else ctx.fillStyle = 'rgba(255,255,255,0.12)';
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '18px Jua';
+      ctx.fillText(`🍕 주황 조각(${vData.n1}/${denom}) + 초록 조각(${vData.n2}/${denom}) = 총 몇 조각일까요?`, 145, 114);
+    } else if (vType === 'decimalbar' || vType === 'percentbar') {
+      // 4학년 소수 바 & 6학년 백분율 배터리 바
+      const startX = 48;
+      const startY = 86;
+      const totalW = 360;
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(startX, startY, totalW, 32);
+
+      let ratio = 0.5;
+      if (vType === 'decimalbar') ratio = (vData.a + vData.b) / 10;
+      else ratio = (vData.pct || 50) / 100;
+
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(startX, startY, totalW * ratio, 32);
+
+      for (let i = 1; i < 10; i++) {
+        ctx.strokeStyle = 'rgba(15,23,42,0.6)';
+        ctx.beginPath();
+        ctx.moveTo(startX + (totalW / 10) * i, startY);
+        ctx.lineTo(startX + (totalW / 10) * i, startY + 32);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '18px Jua';
+      ctx.fillText('🔋 10칸(100%) 전체 기준에서 차지하는 비율 게이지', startX + totalW + 20, startY + 22);
+    } else if (vType === 'factorgrid') {
+      // 5학년: 약수 격자
+      ctx.fillStyle = '#7dd3fc';
+      ctx.font = '18px Jua';
+      ctx.fillText(`📐 ${vData.num}개의 블록을 가로·세로 직사각형으로 빈틈없이 나누는 약수를 찾으세요!`, 48, 108);
+    }
+
+    ctx.restore();
+  },
+
+  drawMarioMode() {
+    // 잔디 바닥 플랫폼
+    ctx.fillStyle = '#15803d';
+    ctx.fillRect(0, 486, canvas.width, 74);
+    ctx.fillStyle = '#22c55e';
+    ctx.fillRect(0, 486, canvas.width, 14);
+
+    // 공중 숫자 벽돌 그리기
+    this.bricks.forEach(b => {
+      const by = b.y + b.bounceY;
+      ctx.save();
+      ctx.fillStyle = b.color;
+      ctx.strokeStyle = '#fef08a';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(b.x, by, b.w, b.h, 14);
+      ctx.fill();
+      ctx.stroke();
+
+      // 벽돌 안 숫자
+      ctx.fillStyle = '#0f172a';
+      ctx.font = '28px Jua';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(b.label, b.x + b.w / 2, by + b.h / 2 + 2);
+      ctx.restore();
+    });
+
+    // 보너스 슬라임 몬스터
+    const s = this.slime;
+    ctx.save();
+    ctx.font = '34px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('💧', s.x + s.w / 2, s.y + 28);
+    ctx.font = '13px Jua';
+    ctx.fillStyle = '#7dd3fc';
+    ctx.fillText('점프 보너스', s.x + s.w / 2, s.y - 4);
+    ctx.restore();
+
+    // 플레이어 캐릭터
+    const p = this.player;
+    ctx.save();
+    if (this.feverTimer > 0) {
+      ctx.shadowColor = '#facc15';
+      ctx.shadowBlur = 20;
+    }
+    ctx.font = '46px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(GameData.currentSkin, p.x + p.w / 2, p.y + p.h / 2);
+    ctx.restore();
+  },
+
+  drawTetrisMode() {
+    const t = this.tetris;
+    const cellW = 54;
+    const cellH = 44;
+    const boardW = t.cols * cellW;
+    const boardH = t.rows * cellH;
+    const startX = (canvas.width - boardW) / 2;
+    const startY = 175;
+
+    // 보드 배경
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(startX - 8, startY - 8, boardW + 16, boardH + 16, 14);
+    ctx.fill();
+    ctx.stroke();
+
+    // 격자 및 쌓인 블록
+    for (let r = 0; r < t.rows; r++) {
+      for (let c = 0; c < t.cols; c++) {
+        const x = startX + c * cellW;
+        const y = startY + r * cellH;
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.strokeRect(x, y, cellW, cellH);
+
+        const val = t.grid[r][c];
+        if (val !== null) {
+          this.drawTetrisCell(x, y, cellW, cellH, val, '#3b82f6');
+        }
+      }
+    }
+
+    // 현재 낙하 중인 블록
+    if (t.activeBlock) {
+      const x = startX + t.activeBlock.c * cellW;
+      const y = startY + t.activeBlock.r * cellH;
+      this.drawTetrisCell(x, y, cellW, cellH, t.activeBlock.val, '#f59e0b');
+    }
+    ctx.restore();
+  },
+
+  drawTetrisCell(x, y, w, h, val, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x + 3, y + 3, w - 6, h - 6, 8);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '22px Jua';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(val, x + w / 2, y + h / 2 + 1);
+  },
+
+  drawNumberLineHint() {
+    const h = this.hintData;
+    if (!h) return;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+    ctx.strokeStyle = '#fb7185';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.roundRect(150, 168, 600, 72, 16);
+    ctx.fill();
+    ctx.stroke();
+
+    // 수직선 그리기
+    const lineX1 = 210;
+    const lineX2 = 690;
+    const lineY = 212;
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(lineX1, lineY);
+    ctx.lineTo(lineX2, lineY);
+    ctx.stroke();
+
+    const minV = Math.min(h.chosen, h.answer) - 5;
+    const maxV = Math.max(h.chosen, h.answer) + 5;
+    const span = Math.max(1, maxV - minV);
+
+    const chosenX = lineX1 + ((h.chosen - minV) / span) * (lineX2 - lineX1);
+    const ansX = lineX1 + ((h.answer - minV) / span) * (lineX2 - lineX1);
+
+    // 내가 친 숫자 표시
+    ctx.fillStyle = '#fb7185';
+    ctx.beginPath();
+    ctx.arc(chosenX, lineY, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = '16px Jua';
+    ctx.textAlign = 'center';
+    ctx.fillText(`내가 친 수 (${h.chosen})`, chosenX, lineY - 16);
+
+    // 정답 방향 화살표 안내
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.arc(ansX, lineY, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillText('🎯 정답 위치', ansX, lineY + 22);
+
+    ctx.restore();
+  },
+
+  loop() {
+    this.update();
+    this.draw();
+    requestAnimationFrame(() => this.loop());
+  }
+};
+
+/**
+ * ============================================================================
+ * 6. 이벤트 리스너 (키보드, 터치 패드, 탭 전환, 상점 모달)
+ * ============================================================================
+ */
+window.addEventListener('keydown', e => {
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
+    e.preventDefault();
+  }
+  if (e.code === 'ArrowLeft') {
+    keys.left = true;
+    if (GameData.mode === 'tetris') Game.moveTetrisHorizontal(-1);
+  }
+  if (e.code === 'ArrowRight') {
+    keys.right = true;
+    if (GameData.mode === 'tetris') Game.moveTetrisHorizontal(1);
+  }
+  if (e.code === 'ArrowUp' || e.code === 'Space') {
+    Game.triggerJumpOrTransform();
+  }
+  if (e.code === 'ArrowDown') {
+    Game.triggerAction();
+  }
+});
+
+window.addEventListener('keyup', e => {
+  if (e.code === 'ArrowLeft') keys.left = false;
+  if (e.code === 'ArrowRight') keys.right = false;
+});
+
+// 모바일 및 마우스 가상 패드 바인딩
+function bindHoldButton(btnId, onDown, onUp) {
+  const el = document.getElementById(btnId);
+  const start = e => { e.preventDefault(); onDown(); };
+  const end = e => { e.preventDefault(); if (onUp) onUp(); };
+  el.addEventListener('mousedown', start);
+  el.addEventListener('mouseup', end);
+  el.addEventListener('mouseleave', end);
+  el.addEventListener('touchstart', start, { passive: false });
+  el.addEventListener('touchend', end, { passive: false });
+}
+
+bindHoldButton(
+  'btnLeft',
+  () => {
+    keys.left = true;
+    if (GameData.mode === 'tetris') Game.moveTetrisHorizontal(-1);
+  },
+  () => { keys.left = false; }
+);
+
+bindHoldButton(
+  'btnRight',
+  () => {
+    keys.right = true;
+    if (GameData.mode === 'tetris') Game.moveTetrisHorizontal(1);
+  },
+  () => { keys.right = false; }
+);
+
+bindHoldButton('btnJump', () => Game.triggerJumpOrTransform());
+bindHoldButton('btnAction', () => Game.triggerAction());
+
+// 학년 탭 전환
+document.querySelectorAll('#gradeTabs .tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#gradeTabs .tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    GameData.grade = parseInt(btn.dataset.grade, 10);
+    sound.playBrickHit();
+    Game.setupNewRound();
+  });
+});
+
+// 모드 탭 전환
+document.querySelectorAll('#modeTabs .tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#modeTabs .tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    GameData.mode = btn.dataset.mode;
+    sound.playBrickHit();
+    Game.setupNewRound();
+  });
+});
+
+// 사운드 & 음성 토글 버튼
+document.getElementById('bgmToggleBtn').addEventListener('click', e => {
+  const on = sound.toggleBGM();
+  e.currentTarget.textContent = on ? '🎵 BGM ON' : '🎵 BGM OFF';
+  e.currentTarget.classList.toggle('active', on);
+});
+
+document.getElementById('sfxToggleBtn').addEventListener('click', e => {
+  sound.sfxEnabled = !sound.sfxEnabled;
+  e.currentTarget.textContent = sound.sfxEnabled ? '🔊 효과음 ON' : '🔇 효과음 OFF';
+  e.currentTarget.classList.toggle('active', sound.sfxEnabled);
+});
+
+document.getElementById('ttsToggleBtn').addEventListener('click', e => {
+  sound.ttsEnabled = !sound.ttsEnabled;
+  e.currentTarget.textContent = sound.ttsEnabled ? '🗣️ 음성 ON' : '静音 음성 OFF';
+  e.currentTarget.classList.toggle('active', sound.ttsEnabled);
+});
+
+// 캐릭터 상점 렌더링 및 열기/닫기
+function renderShop() {
+  const grid = document.getElementById('skinGrid');
+  grid.innerHTML = '';
+  SKINS.forEach(skin => {
+    const owned = GameData.ownedSkins.includes(skin.id);
+    const selected = GameData.currentSkin === skin.emoji;
+    const card = document.createElement('div');
+    card.className = 'skin-card' + (selected ? ' selected' : '');
+    card.innerHTML = `
+      <div class="skin-emoji">${skin.emoji}</div>
+      <div class="skin-name">${skin.name}</div>
+      <div class="skin-price">${selected ? '장착 중' : (owned ? '보유 중 (클릭해 장착)' : `💰 ${skin.price} 코인`)}</div>
+    `;
+    card.addEventListener('click', () => {
+      if (owned) {
+        GameData.currentSkin = skin.emoji;
+        sound.playCorrect();
+      } else if (GameData.coins >= skin.price) {
+        GameData.coins -= skin.price;
+        GameData.ownedSkins.push(skin.id);
+        GameData.currentSkin = skin.emoji;
+        sound.playCorrect();
+      } else {
+        sound.playHint();
+        alert('코인이 부족해요! 수학 문제를 더 풀어서 코인을 모아보세요.');
+      }
+      GameData.save();
+      renderShop();
+    });
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById('openShopBtn').addEventListener('click', () => {
+  renderShop();
+  document.getElementById('shopModal').classList.add('open');
+});
+
+document.getElementById('closeShopBtn').addEventListener('click', () => {
+  document.getElementById('shopModal').classList.remove('open');
+});
+
+// 게임 시작
+Game.init();
+</script>
 </body>
 </html>
