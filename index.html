@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f6fb">
+<title>Word Guardians</title>
+<link rel="preload" href="fonts/NexonLv2Gothic.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- 타이틀 -->
+  <section id="title" class="screen active">
+    <button class="icon-btn mute" id="btn-mute" aria-label="소리 켜기/끄기">🔊</button>
+    <div class="center-col">
+      <h1 class="logo">Word <span>Guardians</span></h1>
+      <div class="pet-card">
+        <div id="pet-emoji" class="pet">🥚</div>
+        <div class="pet-info">
+          <div class="row"><span id="pet-name"></span><span id="lv" class="chip"></span></div>
+          <div class="xpbar"><i id="xp-fill"></i></div>
+          <div class="meta">🪙 <span id="coins">0</span> · 연속 <span id="streak">0</span>일</div>
+        </div>
+      </div>
+      <input id="name-input" maxlength="10" placeholder="내 이름">
+      <button class="btn primary" id="btn-play">게임 시작</button>
+      <div class="menu-row">
+        <button class="btn" id="btn-dex">도감 · 오답노트</button>
+        <button class="btn" id="btn-temple">기억의 신전</button>
+        <button class="btn" id="btn-manage">단어장 관리</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 스테이지 선택 -->
+  <section id="stages" class="screen">
+    <div class="head">
+      <button class="icon-btn" id="btn-stages-back" aria-label="뒤로">←</button>
+      <h2>스테이지</h2>
+      <div class="coin-pill">🪙 <span id="stage-coins">0</span></div>
+    </div>
+    <div class="tabs" id="grade-tabs"></div>
+    <div id="stage-grid"></div>
+  </section>
+
+  <!-- 인게임 -->
+  <section id="game" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-quit" aria-label="나가기">←</button>
+      <div class="progress"><i id="hud-fill"></i></div>
+      <div id="hearts" class="hearts"></div>
+    </div>
+    <div class="status"><span id="combo"></span></div>
+    <div id="stage-area"></div>
+    <div id="answer-area"></div>
+    <div id="feedback" class="feedback"></div>
+  </section>
+
+  <!-- 결과 -->
+  <section id="result" class="screen"><div id="result-body"></div></section>
+
+  <!-- 사전 학습 -->
+  <div class="modal" id="modal-pre">
+    <div class="sheet">
+      <h2 id="pre-title">미리보기</h2>
+      <div class="scroll"><div class="pre-list" id="pre-list"></div></div>
+      <div class="row-btns" style="margin:0">
+        <button class="btn sm" id="pre-replay">다시 듣기</button>
+        <button class="btn sm" id="pre-cancel">닫기</button>
+      </div>
+      <button class="btn primary" id="pre-go">출격!</button>
+    </div>
+  </div>
+
+  <!-- 도감 & 오답노트 -->
+  <div class="modal" id="modal-col">
+    <div class="sheet">
+      <div class="tabs" id="col-tabs" style="margin:0"></div>
+      <div class="scroll" id="col-body"></div>
+      <button class="btn" id="col-close">닫기</button>
+    </div>
+  </div>
+
+  <!-- 단어장 관리 -->
+  <div class="modal" id="modal-manage">
+    <div class="sheet">
+      <h2>단어장 관리</h2>
+      <div class="scroll">
+        <form id="add-form" autocomplete="off">
+          <input id="f-en" placeholder="영어 (예: umbrella)" required>
+          <input id="f-ko" placeholder="한글 뜻 (예: 우산)" required>
+          <input id="f-emoji" placeholder="이모지 (예: ☂️)" maxlength="8">
+          <select id="f-grade">
+            <option value="1">1학년</option><option value="2" selected>2학년</option><option value="3">3학년</option>
+            <option value="4">4학년</option><option value="5">5학년</option><option value="6">6학년</option>
+          </select>
+          <input id="f-sent" class="full" placeholder="예문 (선택)">
+          <button class="btn primary sm full" type="submit">단어 추가</button>
+        </form>
+        <div class="sec">추가한 단어 <span id="custom-count"></span></div>
+        <div id="custom-list"></div>
+        <textarea id="json-box" placeholder="내보내기 결과가 여기에 표시돼요. 불러올 JSON을 붙여넣어도 돼요."></textarea>
+        <div class="row-btns">
+          <button class="btn sm" id="btn-export">내보내기</button>
+          <button class="btn sm" id="btn-import-file">파일 불러오기</button>
+          <button class="btn sm" id="btn-import-text">붙여넣기 불러오기</button>
+          <input type="file" id="file-import" accept=".json,application/json" hidden>
+        </div>
+      </div>
+      <button class="btn" id="manage-close">닫기</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="words.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
