@@ -149,17 +149,16 @@ svg{display:block}
 
 .brand{margin:2px 0 clamp(10px,1.8vh,16px)}
 h1{
-  margin:0;font-size:clamp(30px,8.5vw,38px);line-height:1.15;letter-spacing:-.8px;font-weight:900;
+  margin:0;font-size:clamp(24px,7vw,31px);line-height:1.15;letter-spacing:-.6px;font-weight:900;
   background:linear-gradient(180deg,#ffffff 0%,#7df9ff 58%,#38bdf8 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 4px 16px rgba(56,189,248,.35));
 }
 h1 em{
-  display:block;font-style:normal;font-size:clamp(16px,4.5vw,20px);margin-top:3px;letter-spacing:.04em;
+  display:block;font-style:normal;font-size:clamp(14px,4vw,17px);margin-top:3px;letter-spacing:.04em;
   background:linear-gradient(90deg,#ffe066,#ff9f43);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.brand p{margin:7px 0 0;color:#dce6ff;font-size:13.5px;font-weight:600;line-height:1.4}
 
 /* 게임 안내 박스 */
 .info-card{
@@ -229,7 +228,8 @@ h1 em{
 }
 .gb.on small{color:#05304a}
 #gdesc{margin:11px 0 0;font-size:13px;color:#93e5ff;font-weight:700;min-height:19px}
-.bestl{margin:5px 0 0;font-size:13px;color:var(--gold);font-weight:800;min-height:19px}
+.bestl{margin:5px 0 0;font-size:13px;color:var(--gold);font-weight:800}
+.bestl:empty{display:none}
 .kbd{margin:8px 0 0;font-size:11.5px;color:rgba(164,176,216,.7);font-weight:600}
 .grow{flex:1;min-height:6px}
 
@@ -353,7 +353,7 @@ h1 em{
 }
 .pg-btn.on{background:linear-gradient(180deg,#7df9ff,#38bdf8);color:#041e30;border-color:#b8fbff}
 
-/* 용돈 & 선물 지갑 모달 */
+/* 용돈 지갑 모달 */
 .w-hero{
   border-radius:18px;padding:14px 16px;margin-bottom:14px;
   background:linear-gradient(135deg,rgba(45,226,176,.18),rgba(56,189,248,.18));
@@ -362,17 +362,6 @@ h1 em{
 .w-hero .wl{font-size:12.5px;color:#b8e8ff;font-weight:700}
 .w-hero .wv{font-size:30px;font-weight:900;color:#ffe066;margin:4px 0}
 .w-hero .ws{font-size:12.5px;color:#d6e4ff;font-weight:700}
-.cp-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
-.cp-card{
-  border-radius:16px;padding:12px 10px;text-align:center;
-  background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);
-  display:flex;flex-direction:column;align-items:center;gap:4px;transition:.12s;
-}
-.cp-card:active{transform:scale(.96);background:rgba(255,255,255,.14)}
-.cp-card .ci{font-size:30px;line-height:1.1}
-.cp-card .ct{font-size:13.5px;font-weight:800;color:#fff}
-.cp-card .cc{font-size:13px;font-weight:900;color:#ffe066}
-.cp-card.dim{opacity:.48}
 .custom-box{
   border-radius:16px;padding:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);
   margin-bottom:14px;
@@ -382,7 +371,7 @@ h1 em{
   width:100%;height:42px;border-radius:12px;font-size:14px;font-weight:900;color:#231200;
   background:linear-gradient(180deg,#ffe57f,#ffb74d);
 }
-.hist-list{max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.hist-list{max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
 .hist-row{
   display:flex;justify-content:space-between;align-items:center;gap:8px;
   padding:8px 11px;border-radius:12px;background:rgba(255,255,255,.05);font-size:13px;
@@ -461,7 +450,6 @@ h1 em{
 
   <div class="brand">
     <h1>넘버 드롭<em>매스 블록</em></h1>
-    <p>더하기·빼기 블록으로 목표를 만들고 용돈과 등급을 쌓아요!</p>
   </div>
 
   <div class="info-card">
@@ -515,7 +503,6 @@ h1 em{
   <button class="sw" data-t="voice"><span>음성 읽어주기</span><i></i></button>
   <button class="sw" data-t="pad"><span>터치 패드</span><i></i></button>
   <button class="set-link" id="setProfile"><span>👤 내 캐릭터·학년 수정</span><span>변경 ›</span></button>
-  <button class="set-link" id="setPin"><span>🔐 아빠 비밀번호 변경</span><span>변경 ›</span></button>
   <button class="cta" id="sheetClose">닫기</button>
 </div></div>
 
@@ -543,7 +530,7 @@ h1 em{
   <button class="ghost hidden" id="profCancel">닫기</button>
 </div></div>
 
-<!-- 선물 · 용돈 지갑 모달 -->
+<!-- 선물 · 용돈 지갑 모달 (금액 직접 차감 전용) -->
 <div id="walletModal" class="ov c hidden"><div class="sheet card">
   <h2>🎁 선물 · 용돈 지갑</h2>
   <div class="w-hero">
@@ -551,10 +538,8 @@ h1 em{
     <div class="wv" id="wBalance">0원</div>
     <div class="ws" id="wRankInfo">🌱 수학 새싹 · 누적 0점</div>
   </div>
-  <label class="f-lbl" style="margin-top:0">선물 · 소원 쿠폰</label>
-  <div class="cp-grid" id="cpGrid"></div>
   <div class="custom-box">
-    <label class="f-lbl" style="margin:0 0 8px">직접 금액 차감하기</label>
+    <label class="f-lbl" style="margin:0 0 8px">금액 차감하기</label>
     <div class="custom-row">
       <input class="inp" id="custTitle" type="text" maxlength="16" placeholder="예: 문구점 쇼핑">
       <input class="inp" id="custAmt" type="number" inputmode="numeric" min="10" step="10" placeholder="금액(원)">
@@ -566,27 +551,14 @@ h1 em{
   <button class="ghost" id="walletClose">닫기</button>
 </div></div>
 
-<!-- 아빠 PIN 확인 모달 -->
+<!-- 아빠 확인 모달 -->
 <div id="pinModal" class="ov c hi hidden"><div class="sheet card">
   <h2>🔐 아빠 확인이 필요해요</h2>
   <p class="subtxt" id="pinDesc"></p>
-  <label class="f-lbl" for="pinInp">아빠 비밀번호 (4자리)</label>
-  <input class="inp" id="pinInp" type="password" inputmode="numeric" maxlength="4" placeholder="숫자 4자리 입력">
-  <p class="subtxt" id="pinHint" style="margin:8px 0 0;font-size:12px"></p>
+  <label class="f-lbl" for="pinInp">아빠 비밀번호</label>
+  <input class="inp" id="pinInp" type="password" inputmode="numeric" maxlength="6" placeholder="비밀번호 입력">
   <button class="cta" id="pinConfirm">확인하고 차감하기</button>
   <button class="ghost" id="pinCancel">취소</button>
-</div></div>
-
-<!-- 아빠 PIN 변경 모달 -->
-<div id="pinChangeModal" class="ov c hi hidden"><div class="sheet card">
-  <h2>🔐 아빠 비밀번호 변경</h2>
-  <p class="subtxt" id="pcHint">현재 비밀번호와 새 4자리 숫자를 입력해 주세요.</p>
-  <label class="f-lbl" for="pcOld">현재 비밀번호</label>
-  <input class="inp" id="pcOld" type="password" inputmode="numeric" maxlength="4" placeholder="현재 4자리">
-  <label class="f-lbl" for="pcNew">새 비밀번호 (4자리 숫자)</label>
-  <input class="inp" id="pcNew" type="password" inputmode="numeric" maxlength="4" placeholder="새 4자리">
-  <button class="cta" id="pcSave">비밀번호 저장</button>
-  <button class="ghost" id="pcCancel">취소</button>
 </div></div>
 
 <div id="result" class="ov c hidden"><div class="sheet card" id="resBox"></div></div>
@@ -680,6 +652,7 @@ let W=480,H=860;
 const COLS=6,ROWS=10;let CELL=50,BX=0,BY=0;
 const FONT='"NexonLv2Gothic",-apple-system,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
 const SKEY='mathBlockAdventure.v1';
+const DAD_PIN='710200';
 const isTouch=('ontouchstart' in window)||(navigator.maxTouchPoints>0)||(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
 
 const AVATARS=['👧','🧚‍♀️','👩‍🚀','🐱','🦄','👑'];
@@ -691,17 +664,11 @@ const RANKS=[
   {name:'수학 박사',ico:'💎',min:50000},
   {name:'전설의 천재',ico:'👑',min:100000}
 ];
-const COUPONS=[
-  {id:'snack',ico:'🍪',title:'간식 교환권',cost:1000},
-  {id:'ice',ico:'🍦',title:'아이스크림',cost:2000},
-  {id:'wish',ico:'🌟',title:'소원 1개 들어주기',cost:5000},
-  {id:'toy',ico:'🎁',title:'선물 / 장난감',cost:10000}
-];
 const GRADES=[
   null,
-  '10 이하 덧셈 · 뺄셈',
+  '12 이하 덧셈 · 뺄셈',
   '두 자리 덧셈 · 뺄셈',
-  '20 만들기 · 분수 덧셈',
+  '24 만들기 · 분수 덧셈',
   '소수 · 분수 덧셈 · 뺄셈',
   '덧셈 · 뺄셈 혼합 도전',
   '큰 수 · 소수 덧셈 · 뺄셈'
@@ -711,7 +678,7 @@ function defSave(){
   return{
     coins:0,best:{},voice:true,sfx:true,bgm:true,pad:isTouch,grade:2,
     profile:{name:'',grade:2,avatar:'👧',created:false},
-    totalScore:0,wallet:0,pin:'1234',history:[]
+    totalScore:0,wallet:0,history:[]
   };
 }
 let S=(function(){
@@ -722,7 +689,6 @@ let S=(function(){
     if(!Array.isArray(m.history))m.history=[];
     if(typeof m.totalScore!=='number'||isNaN(m.totalScore))m.totalScore=0;
     if(typeof m.wallet!=='number'||isNaN(m.wallet))m.wallet=0;
-    if(!m.pin||!/^\d{4}$/.test(String(m.pin)))m.pin='1234';
     return m;
   }catch(e){return defSave();}
 })();
@@ -835,10 +801,6 @@ window.addEventListener('popstate',()=>{
     if(navStack[navStack.length-1]==='pin')navStack.pop();
     closePinModal(true);return;
   }
-  if(!$('#pinChangeModal').classList.contains('hidden')){
-    if(navStack[navStack.length-1]==='pinChange')navStack.pop();
-    closePinChangeModal(true);return;
-  }
   if(!$('#walletModal').classList.contains('hidden')){
     if(navStack[navStack.length-1]==='wallet')navStack.pop();
     closeWalletModal(true);return;
@@ -889,7 +851,7 @@ document.querySelectorAll('.pb').forEach(b=>{const k=b.dataset.k;let t0=0;
  b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up);b.addEventListener('contextmenu',e=>e.preventDefault());});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&!G.over&&!G.paused)togglePause();});
 
-/* ===================== 프로필 / 지갑 / PIN 모달 ===================== */
+/* ===================== 프로필 / 지갑 / 아빠 확인 모달 ===================== */
 let editAv='👧',editGrade=2;
 function openProfileModal(isFirst){
   editAv=S.profile.avatar||'👧';
@@ -938,7 +900,7 @@ $('#profSave').onclick=()=>{
 };
 $('#profCancel').onclick=()=>{Snd.click();closeProfileModal(false);};
 
-/* 용돈 & 선물 지갑 모달 */
+/* 용돈 지갑 모달 */
 let pendingSpend=null;
 function openWalletModal(){
   renderWallet();
@@ -953,19 +915,6 @@ function renderWallet(){
   const rk=getRank(S.totalScore);
   $('#wBalance').textContent=S.wallet.toLocaleString()+'원';
   $('#wRankInfo').textContent=rk.cur.ico+' '+rk.cur.name+' · 총 누적 '+S.totalScore.toLocaleString()+'점';
-  const cg=$('#cpGrid');cg.innerHTML='';
-  COUPONS.forEach(c=>{
-    const ok=S.wallet>=c.cost;
-    const b=document.createElement('button');
-    b.className='cp-card'+(ok?'':' dim');
-    b.innerHTML='<span class="ci">'+c.ico+'</span><span class="ct">'+c.title+'</span><span class="cc">'+c.cost.toLocaleString()+'원</span>';
-    b.onclick=()=>{
-      Snd.init();Snd.click();
-      if(!ok){showToast('용돈이 조금 부족해요! 게임을 해서 모아봐요!');return;}
-      openPinModal(c.ico+' '+c.title,c.cost);
-    };
-    cg.appendChild(b);
-  });
   const hl=$('#histList');hl.innerHTML='';
   if(!S.history.length){
     hl.innerHTML='<div class="hist-empty">아직 사용한 기록이 없어요.</div>';
@@ -983,19 +932,18 @@ $('#walletClose').onclick=()=>{Snd.click();closeWalletModal(false);};
 $('#walletModal').addEventListener('click',e=>{if(e.target.id==='walletModal')closeWalletModal(false);});
 $('#btnCustUse').onclick=()=>{
   Snd.init();Snd.click();
-  const title=($('#custTitle').value.trim()||'직접 용돈 사용');
+  const title=($('#custTitle').value.trim()||'용돈 사용');
   const amt=Math.floor(Number($('#custAmt').value)||0);
   if(amt<10){showToast('10원 이상 금액을 입력해 주세요!');return;}
   if(amt>S.wallet){showToast('보유한 용돈보다 큰 금액이에요!');return;}
   openPinModal('💵 '+title,amt);
 };
 
-/* 아빠 PIN 확인 */
+/* 아빠 확인 */
 function openPinModal(title,cost){
   pendingSpend={title,cost};
-  $('#pinDesc').textContent=title+' ('+cost.toLocaleString()+'원)을 사용할까요?';
+  $('#pinDesc').textContent=title+' ('+cost.toLocaleString()+'원)을 차감할까요?';
   $('#pinInp').value='';
-  $('#pinHint').textContent=S.pin==='1234'?'초기 비밀번호는 1234입니다. (설정에서 변경 가능)':'설정하신 4자리 비밀번호를 입력해 주세요.';
   $('#pinModal').classList.remove('hidden');
   if(navStack[navStack.length-1]!=='pin')pushNav('pin');
   setTimeout(()=>$('#pinInp').focus(),150);
@@ -1008,7 +956,7 @@ function closePinModal(fromPop){
 $('#pinConfirm').onclick=()=>{
   if(!pendingSpend)return;
   const val=$('#pinInp').value.trim();
-  if(val!==String(S.pin)){
+  if(val!==DAD_PIN){
     Snd.bad();showToast('비밀번호가 틀렸어요!');$('#pinInp').value='';$('#pinInp').focus();return;
   }
   const now=new Date();
@@ -1027,32 +975,10 @@ $('#pinConfirm').onclick=()=>{
 };
 $('#pinCancel').onclick=()=>{Snd.click();closePinModal(false);};
 
-/* 아빠 PIN 변경 */
-function openPinChangeModal(){
-  $('#pcOld').value='';$('#pcNew').value='';
-  $('#pcHint').textContent=S.pin==='1234'?'현재 초기 비밀번호는 1234입니다.':'현재 비밀번호와 새 4자리 숫자를 입력해 주세요.';
-  $('#pinChangeModal').classList.remove('hidden');
-  if(navStack[navStack.length-1]!=='pinChange')pushNav('pinChange');
-}
-function closePinChangeModal(fromPop){
-  $('#pinChangeModal').classList.add('hidden');
-  if(!fromPop&&navStack[navStack.length-1]==='pinChange')popNav(1);
-}
-$('#pcSave').onclick=()=>{
-  const oldP=$('#pcOld').value.trim(),newP=$('#pcNew').value.trim();
-  if(oldP!==String(S.pin)){Snd.bad();showToast('현재 비밀번호가 맞지 않아요!');return;}
-  if(!/^\d{4}$/.test(newP)){Snd.bad();showToast('새 비밀번호는 숫자 4자리로 입력해 주세요!');return;}
-  S.pin=newP;persist();Snd.ok();
-  closePinChangeModal(false);
-  showToast('아빠 비밀번호가 변경되었어요!');
-};
-$('#pcCancel').onclick=()=>{Snd.click();closePinChangeModal(false);};
-
 /* ===================== 메인 UI ===================== */
-function screenTo(id){['menu','game'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id));['pause','result','sheet','walletModal','pinModal','pinChangeModal'].forEach(x=>$('#'+x).classList.add('hidden'));}
+function screenTo(id){['menu','game'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id));['pause','result','sheet','walletModal','pinModal'].forEach(x=>$('#'+x).classList.add('hidden'));}
 function renderToggles(){document.querySelectorAll('[data-t]').forEach(el=>el.classList.toggle('on',!!S[el.dataset.t]));$('#game').classList.toggle('padon',!!S.pad);}
 function renderMenu(){
- // 프로필 & 등급 & 용돈 표시
  $('#mAv').textContent=S.profile.avatar||'👧';
  $('#mName').textContent=S.profile.name||'캐릭터 만들기';
  $('#mGrade').textContent='내 학년 · '+(S.profile.grade||2)+'학년';
@@ -1062,7 +988,6 @@ function renderMenu(){
  $('#mRankFill').style.width=rk.pct.toFixed(1)+'%';
  $('#mWallet').textContent=S.wallet.toLocaleString()+'원';
 
- // 학년 선택 버튼 + 보너스 배율 배지
  const gb=$('#gradeBtns');gb.innerHTML='';
  for(let g=1;g<=6;g++){
    const b=document.createElement('button');
@@ -1076,7 +1001,7 @@ function renderMenu(){
  const selB=calcGradeBonus(S.grade);
  $('#gdesc').textContent=S.grade+'학년 · '+GRADES[S.grade]+' ('+selB.short+')';
  const bs=S.best['drop_g'+S.grade];
- $('#best').textContent=bs?('🏆 최고 점수 '+bs.toLocaleString()+'점'):'첫 기록에 도전해 보세요!';
+ $('#best').textContent=bs?('🏆 최고 점수 '+bs.toLocaleString()+'점'):'';
  $('#kbd').classList.toggle('hidden',isTouch);
  renderToggles();
 }
@@ -1100,7 +1025,6 @@ $('#btnSet').onclick=()=>{Snd.init();Snd.click();openSheet();};
 $('#sheetClose').onclick=()=>{Snd.click();closeSheet(false);};
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet(false);});
 $('#setProfile').onclick=()=>{Snd.click();closeSheet(false);setTimeout(()=>openProfileModal(false),50);};
-$('#setPin').onclick=()=>{Snd.click();openPinChangeModal();};
 document.addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(!t)return;Snd.init();const k=t.dataset.t;S[k]=!S[k];persist();renderToggles();
  if(k==='bgm'){if(S.bgm&&G&&!G.over)Snd.startBgm();else Snd.stopBgm();}
  if(k==='voice'&&!S.voice&&'speechSynthesis' in window)speechSynthesis.cancel();
@@ -1195,7 +1119,7 @@ function drawCountdown(){
  ctx.restore();
 }
 
-/* ===================== 게임 로직 (더하기 · 빼기 전용) ===================== */
+/* ===================== 게임 로직 (더하기 · 빼기 전용, 소폭 상향 난이도) ===================== */
 const BOSSES=[['👾','알쏭달쏭 몬스터'],['🐲','뺄셈 드래곤'],['🦑','분수 크라켄'],['🤖','계산 로봇']];
 function calc(op,x,y){switch(op){case '+':return x+y;case '−':return Math.abs(x-y);}return NaN;}
 function pairOp(a,b,gl){
@@ -1212,44 +1136,44 @@ function makeGoal(g,k){
 
  if(g===1){
   if(k%3===0)return{text:'합해서 10 만들기',spoken:'합해서 십 만들기',ops:['+'],pool:ints(1,9),target:10};
-  if(k%3===1)return{text:'합해서 8 만들기',spoken:'합해서 팔 만들기',ops:['+'],pool:ints(1,7),target:8};
-  return{text:'빼서 2 만들기',spoken:'빼서 이 만들기',ops:['−'],pool:ints(1,8),target:2};
+  if(k%3===1)return{text:'합해서 12 만들기',spoken:'합해서 십이 만들기',ops:['+'],pool:ints(3,9),target:12};
+  return{text:'빼서 3 만들기',spoken:'빼서 삼 만들기',ops:['−'],pool:ints(1,9),target:3};
  }
  if(g===2){
-  if(k%3===0)return{text:'합해서 12 만들기',spoken:'합해서 십이 만들기',ops:['+'],pool:ints(3,9),target:12};
-  if(k%3===1)return{text:'빼서 4 만들기',spoken:'빼서 사 만들기',ops:['−'],pool:ints(1,9),target:4};
-  return{text:'합해서 15 만들기',spoken:'합해서 십오 만들기',ops:['+'],pool:ints(6,9),target:15};
+  if(k%3===0)return{text:'합해서 15 만들기',spoken:'합해서 십오 만들기',ops:['+'],pool:ints(4,11),target:15};
+  if(k%3===1)return{text:'빼서 6 만들기',spoken:'빼서 육 만들기',ops:['−'],pool:ints(2,14),target:6};
+  return{text:'합해서 18 만들기',spoken:'합해서 십팔 만들기',ops:['+'],pool:ints(5,13),target:18};
  }
  if(g===3){
-  if(k%3===0)return{text:'합해서 20 만들기',spoken:'합해서 이십 만들기',ops:['+'],pool:ints(5,15),target:20};
-  if(k%3===1)return{text:'빼서 5 만들기',spoken:'빼서 오 만들기',ops:['−'],pool:ints(2,14),target:5};
-  return{text:'합해서 1 만들기 (분모 4)',spoken:'합해서 일 만들기',ops:['+'],pool:frs(4),target:1};
- }
- if(g===4){
-  if(k%3===0)return{text:'합해서 1.0 만들기',spoken:'합해서 일 점 영 만들기',ops:['+'],pool:decs(9),target:1};
-  if(k%3===1)return{text:'빼서 0.3 만들기',spoken:'빼서 영 점 삼 만들기',ops:['−'],pool:decs(9),target:.3};
+  if(k%3===0)return{text:'합해서 24 만들기',spoken:'합해서 이십사 만들기',ops:['+'],pool:ints(6,18),target:24};
+  if(k%3===1)return{text:'빼서 8 만들기',spoken:'빼서 팔 만들기',ops:['−'],pool:ints(3,19),target:8};
   return{text:'합해서 1 만들기 (분모 6)',spoken:'합해서 일 만들기',ops:['+'],pool:frs(6),target:1};
  }
- if(g===5){
-  if(k%3===0)return{text:'더하거나 빼서 10 만들기',spoken:'더하거나 빼서 십 만들기',ops:['+','−'],pool:pickInts([1,2,3,4,5,6,7,8,9,11,12,13,14,15]),target:10};
-  if(k%3===1)return{text:'더하거나 빼서 15 만들기',spoken:'더하거나 빼서 십오 만들기',ops:['+','−'],pool:pickInts([2,3,4,5,6,7,8,9,10,11,12,13,17,18,19,20]),target:15};
-  return{text:'더하거나 빼서 20 만들기',spoken:'더하거나 빼서 이십 만들기',ops:['+','−'],pool:pickInts([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,23,24,25]),target:20};
+ if(g===4){
+  if(k%3===0)return{text:'합해서 1.2 만들기',spoken:'합해서 일 점 이 만들기',ops:['+'],pool:pickDecs([0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]),target:1.2};
+  if(k%3===1)return{text:'빼서 0.4 만들기',spoken:'빼서 영 점 사 만들기',ops:['−'],pool:decs(9),target:.4};
+  return{text:'합해서 1 만들기 (분모 8)',spoken:'합해서 일 만들기',ops:['+'],pool:frs(8),target:1};
  }
- if(k%3===0)return{text:'더하거나 빼서 25 만들기',spoken:'더하거나 빼서 이십오 만들기',ops:['+','−'],pool:pickInts([5,10,15,20,30,35,40]),target:25};
- if(k%3===1)return{text:'더하거나 빼서 1.0 만들기',spoken:'더하거나 빼서 일 점 영 만들기',ops:['+','−'],pool:pickDecs([0.2,0.4,0.5,0.6,0.8,1.2,1.4,1.5]),target:1};
- return{text:'더하거나 빼서 30 만들기',spoken:'더하거나 빼서 삼십 만들기',ops:['+','−'],pool:pickInts([5,10,15,20,25,35,40,45]),target:30};
+ if(g===5){
+  if(k%3===0)return{text:'더하거나 빼서 14 만들기',spoken:'더하거나 빼서 십사 만들기',ops:['+','−'],pool:pickInts([2,3,4,5,6,7,8,9,10,11,12,16,17,18,19,20]),target:14};
+  if(k%3===1)return{text:'더하거나 빼서 18 만들기',spoken:'더하거나 빼서 십팔 만들기',ops:['+','−'],pool:pickInts([3,4,5,6,7,8,9,10,11,12,13,14,15,21,22,23,24]),target:18};
+  return{text:'더하거나 빼서 24 만들기',spoken:'더하거나 빼서 이십사 만들기',ops:['+','−'],pool:pickInts([4,6,8,9,10,11,12,13,14,15,16,18,20,28,30,32]),target:24};
+ }
+ if(k%3===0)return{text:'더하거나 빼서 35 만들기',spoken:'더하거나 빼서 삼십오 만들기',ops:['+','−'],pool:pickInts([5,8,10,12,15,17,18,20,23,25,27,30,40,45,50]),target:35};
+ if(k%3===1)return{text:'더하거나 빼서 1.5 만들기',spoken:'더하거나 빼서 일 점 오 만들기',ops:['+','−'],pool:pickDecs([0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.8,2.0,2.2]),target:1.5};
+ return{text:'더하거나 빼서 45 만들기',spoken:'더하거나 빼서 사십오 만들기',ops:['+','−'],pool:pickInts([6,9,12,15,18,20,21,24,25,27,30,33,36,39,51,54,60]),target:45};
 }
 function genBlock(){
  const gl=G.goal;let item=null;
- if(Math.random()<.8){const ex=[];G.grid.forEach(r=>r.forEach(c=>{if(c&&!c.flash)ex.push(c);}));
+ if(Math.random()<.7){const ex=[];G.grid.forEach(r=>r.forEach(c=>{if(c&&!c.flash)ex.push(c);}));
   if(ex.length){const e=pick(ex),cands=gl.pool.filter(p=>gl.ops.some(op=>Math.abs(calc(op,p.val,e.val)-gl.target)<1e-6));if(cands.length)item=pick(cands);}}
  if(!item)item=pick(gl.pool);
  return{label:item.label,val:item.val,op:pick(gl.ops),opts:[item].concat(shuffle(gl.pool.filter(p=>p!==item)).slice(0,2)),oi:0};}
 function startDrop(grade){
- G={mode:'drop',grade:grade,dungeon:false,score:0,combo:0,fever:false,feverT:0,defeated:0,pairsTotal:0,coinsGot:0,grid:Array.from({length:ROWS},()=>Array(COLS).fill(null)),cur:null,next:null,phase:'countdown',cd:3.4,lastCd:4,timer:0,clearT:0,pairs:[],chain:0,parts:[],floats:[],shake:0,bossHit:0,t:0,rep:0,paused:false,over:false,speed:1.25,bannerT:0,bannerText:'',goalFlash:0};
+ G={mode:'drop',grade:grade,dungeon:false,score:0,combo:0,fever:false,feverT:0,defeated:0,pairsTotal:0,coinsGot:0,grid:Array.from({length:ROWS},()=>Array(COLS).fill(null)),cur:null,next:null,phase:'countdown',cd:3.4,lastCd:4,timer:0,clearT:0,pairs:[],chain:0,parts:[],floats:[],shake:0,bossHit:0,t:0,rep:0,paused:false,over:false,speed:1.05,bannerT:0,bannerText:'',goalFlash:0};
  setupBoss();G.next=genBlock();}
 function setupBoss(){G.bossMax=75+25*G.defeated;G.bossHp=G.bossMax;G.goal=makeGoal(G.grade,G.defeated);G.goalFlash=2;}
-function spawn(){const blk=G.next;G.next=genBlock();if(G.grid[0][2]){finish(false);return;}G.cur={c:2,r:0,blk:blk};G.timer=0;G.phase='fall';G.speed=Math.max(.55,1.25-.1*G.defeated-.015*Math.min(20,G.pairsTotal));}
+function spawn(){const blk=G.next;G.next=genBlock();if(G.grid[0][2]){finish(false);return;}G.cur={c:2,r:0,blk:blk};G.timer=0;G.phase='fall';G.speed=Math.max(.45,1.05-.1*G.defeated-.018*Math.min(20,G.pairsTotal));}
 const canDown=()=>G.cur.r+1<ROWS&&!G.grid[G.cur.r+1][G.cur.c];
 function toggleBlk(){const b=G.cur.blk,gl=G.goal;
  if(gl.ops.length>1){b.op=gl.ops[(gl.ops.indexOf(b.op)+1)%gl.ops.length];}
